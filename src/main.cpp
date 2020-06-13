@@ -1,4 +1,6 @@
 #include "matrix.hpp"
+#include "squareMatrix.hpp"
+
 
 constexpr Core::Maths::Matrix<1,3,float> getRandMat()
 {
@@ -42,15 +44,18 @@ int main()
     // constexpr bool b = Core::Maths::Matrix<1,3,double>::isMultiplicationPossible<Core::Maths::Matrix<3,1,std::vector<int>>>();
     // std::cout << (b ? "yes" : "nop") << std::endl;
 
-    Core::Maths::SquareMatrix<4, float> m = Core::Maths::Matrix<4,4, float>::zero();
+    Core::Maths::SquareMatrix<4, float> m = Core::Maths::Matrix<4, 4, float>::zero();
     for (uint i = 0; i < 3; i++)
     {
         m[i][i] = 4;
     }
 
-    std::cout << m << std::endl;
-    std::cout << m.getInverse() << std::endl;
-    std::cout << m.getTranslation() << std::endl;
+    Core::Maths::Matrix<4, 1, float> r;
+    m.resolveEquation(r);
+
+    // std::cout << m << std::endl;
+    // std::cout << m.getInverse() << std::endl;
+    // std::cout << m.getTranslation() << std::endl;
     // Core::Maths::SquareMatrix<3 - 1, float> subMatrix = (m.getSubMatrix(1lu, 0lu));
 
     // Core::Maths::SquareMatrix<3, float> m;

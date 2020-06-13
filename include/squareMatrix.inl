@@ -1,18 +1,13 @@
-#include "matrix.hpp"
+#include "squareMatrix.hpp"
 
-#define SQUARE_MATRIX_TEMPLATE_PARAMETERS template<size_t ROWS, size_t COLUMNS, typename ELEM_TYPE> 
-#define ENABLE_IF_SQUARED_TEMPLATE_PARAMETERS typename SELF_TYPE, typename
-#define SQUARE_MATRIX Core::Maths::Matrix<ROWS, COLUMNS, ELEM_TYPE>
-
-#define SQUARE_MATRIX_ASSERT static_assert(std::is_same<SELF_TYPE, SelfType>::value, \
-                                "You should not initialize this parameter. The parameter should be the default one."); \
-                             static_assert(isSquared(), "This matrix should be squared");
+#define SQUARE_MATRIX_TEMPLATE_PARAMETERS template<size_t SIZE, typename ELEM_TYPE> 
+#define SQUARE_MATRIX Core::Maths::SquareMatrix<SIZE, ELEM_TYPE>
 
 SQUARE_MATRIX_TEMPLATE_PARAMETERS  
-template<ENABLE_IF_SQUARED_TEMPLATE_PARAMETERS>
+// template<ENABLE_IF_SQUARED_TEMPLATE_PARAMETERS>
 constexpr void SQUARE_MATRIX::copyDiagonaleFrom(const SQUARE_MATRIX& copiedFrom) noexcept
 {
-    SQUARE_MATRIX_ASSERT
+    // SQUARE_MATRIX_ASSERT
 
     for (size_t i = 0; i < getSize(); i++)
     {
@@ -21,10 +16,10 @@ constexpr void SQUARE_MATRIX::copyDiagonaleFrom(const SQUARE_MATRIX& copiedFrom)
 }
 
 SQUARE_MATRIX_TEMPLATE_PARAMETERS  
-template<ENABLE_IF_SQUARED_TEMPLATE_PARAMETERS>
+// template<ENABLE_IF_SQUARED_TEMPLATE_PARAMETERS>
 constexpr void SQUARE_MATRIX::setDiagonaleTo(const ELEM_TYPE& value) noexcept
 {
-    SQUARE_MATRIX_ASSERT
+    // SQUARE_MATRIX_ASSERT
 
     for (size_t i = 0; i < getSize(); i++)
     {
@@ -33,20 +28,20 @@ constexpr void SQUARE_MATRIX::setDiagonaleTo(const ELEM_TYPE& value) noexcept
 }
 
 SQUARE_MATRIX_TEMPLATE_PARAMETERS  
-template<typename SelfType>
+// template<typename SelfType>
 inline constexpr size_t SQUARE_MATRIX::getSize() noexcept
 {
-    // SQUARE_MATRIX_ASSERT
+    // // SQUARE_MATRIX_ASSERT
 
     // Could also return getNbRows(), the decision is arbitrary. 
-    return getNbColumns();
+    return SIZE;
 }
 
 SQUARE_MATRIX_TEMPLATE_PARAMETERS  
-template<ENABLE_IF_SQUARED_TEMPLATE_PARAMETERS>
+// template<ENABLE_IF_SQUARED_TEMPLATE_PARAMETERS>
 constexpr SQUARE_MATRIX SQUARE_MATRIX::getTransposed() const noexcept
 {
-    SQUARE_MATRIX_ASSERT
+    // SQUARE_MATRIX_ASSERT
 
     Core::Maths::SquareMatrix<getSize(), ELEM_TYPE> returnedMatrix;
 
@@ -68,10 +63,10 @@ constexpr SQUARE_MATRIX SQUARE_MATRIX::getTransposed() const noexcept
 }
 
 SQUARE_MATRIX_TEMPLATE_PARAMETERS  
-template<ENABLE_IF_SQUARED_TEMPLATE_PARAMETERS>
+// template<ENABLE_IF_SQUARED_TEMPLATE_PARAMETERS>
 constexpr SQUARE_MATRIX& SQUARE_MATRIX::transpose() noexcept
 {
-    SQUARE_MATRIX_ASSERT
+    // SQUARE_MATRIX_ASSERT
 
     for (size_t i = 0; i < getSize(); i++)
     {
@@ -87,10 +82,10 @@ constexpr SQUARE_MATRIX& SQUARE_MATRIX::transpose() noexcept
 
 
 SQUARE_MATRIX_TEMPLATE_PARAMETERS  
-template<ENABLE_IF_SQUARED_TEMPLATE_PARAMETERS>
+// template<ENABLE_IF_SQUARED_TEMPLATE_PARAMETERS>
 constexpr SQUARE_MATRIX SQUARE_MATRIX::identity() noexcept
 {
-    SQUARE_MATRIX_ASSERT
+    // SQUARE_MATRIX_ASSERT
 
     Core::Maths::SquareMatrix<getSize(), ELEM_TYPE> returnedMatrix = Core::Maths::SquareMatrix<getSize(), ELEM_TYPE>::zero();
 
@@ -103,19 +98,19 @@ constexpr SQUARE_MATRIX SQUARE_MATRIX::identity() noexcept
 }
 
 SQUARE_MATRIX_TEMPLATE_PARAMETERS  
-template<ENABLE_IF_SQUARED_TEMPLATE_PARAMETERS, size_t SIZE>
-constexpr ELEM_TYPE SQUARE_MATRIX::getDeterminant(typename std::enable_if<(SIZE == 1)>::type*) const noexcept
+template<size_t SELF_SIZE>
+constexpr ELEM_TYPE SQUARE_MATRIX::getDeterminant(typename std::enable_if<(SELF_SIZE == 1)>::type*) const noexcept
 {
-    SQUARE_MATRIX_ASSERT
+    // SQUARE_MATRIX_ASSERT
 
     return this->elements[0];
 }
 
 SQUARE_MATRIX_TEMPLATE_PARAMETERS  
-template<ENABLE_IF_SQUARED_TEMPLATE_PARAMETERS, size_t SIZE>
-constexpr ELEM_TYPE SQUARE_MATRIX::getDeterminant(typename std::enable_if<(SIZE > 1)>::type*) const noexcept
+template<size_t SELF_SIZE>
+constexpr ELEM_TYPE SQUARE_MATRIX::getDeterminant(typename std::enable_if<(SELF_SIZE > 1)>::type*) const noexcept
 {
-    SQUARE_MATRIX_ASSERT
+    // SQUARE_MATRIX_ASSERT
 
     ELEM_TYPE det = static_cast<ELEM_TYPE>(0);
     
@@ -131,28 +126,26 @@ constexpr ELEM_TYPE SQUARE_MATRIX::getDeterminant(typename std::enable_if<(SIZE 
 }
 
 SQUARE_MATRIX_TEMPLATE_PARAMETERS
-template<ENABLE_IF_SQUARED_TEMPLATE_PARAMETERS>
 inline constexpr bool SQUARE_MATRIX::isOrthogonal() const noexcept
 {
-    SQUARE_MATRIX_ASSERT
+    // SQUARE_MATRIX_ASSERT
 
     return (*this) * this->getTransposed() == this->identity();
 }
 
 SQUARE_MATRIX_TEMPLATE_PARAMETERS
-template<ENABLE_IF_SQUARED_TEMPLATE_PARAMETERS>
 inline constexpr ELEM_TYPE SQUARE_MATRIX::getMinorant(size_t excludedRowIndex, size_t excludedColumnIndex) const noexcept
 {
-    SQUARE_MATRIX_ASSERT
+    // SQUARE_MATRIX_ASSERT
 
-    return this->getSubMatrix(excludedRowIndex, excludedColumnIndex).getDeterminant();
+    // TODO : Sfinae
+    return Core::Maths::SquareMatrix<SIZE - 1, ELEM_TYPE>(this->getSubMatrix(excludedRowIndex, excludedColumnIndex)).getDeterminant();
 }
 
 SQUARE_MATRIX_TEMPLATE_PARAMETERS
-template<ENABLE_IF_SQUARED_TEMPLATE_PARAMETERS>
-inline ELEM_TYPE SQUARE_MATRIX::getCofactor(size_t excludedRowIndex, size_t excludedColumnIndex) const noexcept
+inline constexpr ELEM_TYPE SQUARE_MATRIX::getCofactor(size_t excludedRowIndex, size_t excludedColumnIndex) const noexcept
 {
-    SQUARE_MATRIX_ASSERT
+    // SQUARE_MATRIX_ASSERT
 
     return (excludedRowIndex + excludedColumnIndex) % 2 == 0 ? // condition
             getMinorant(excludedRowIndex, excludedColumnIndex) 
@@ -161,10 +154,9 @@ inline ELEM_TYPE SQUARE_MATRIX::getCofactor(size_t excludedRowIndex, size_t excl
 }
 
 SQUARE_MATRIX_TEMPLATE_PARAMETERS
-template<ENABLE_IF_SQUARED_TEMPLATE_PARAMETERS>
-SQUARE_MATRIX SQUARE_MATRIX::getComatrix() const noexcept
+constexpr SQUARE_MATRIX SQUARE_MATRIX::getComatrix() const noexcept
 {
-    SQUARE_MATRIX_ASSERT
+    // SQUARE_MATRIX_ASSERT
 
     SquareMatrix<getSize(), ELEM_TYPE> comatrix;
 
@@ -180,28 +172,31 @@ SQUARE_MATRIX SQUARE_MATRIX::getComatrix() const noexcept
 }
 
 SQUARE_MATRIX_TEMPLATE_PARAMETERS
-template<ENABLE_IF_SQUARED_TEMPLATE_PARAMETERS>
-inline SQUARE_MATRIX SQUARE_MATRIX::getAdjoint() const noexcept
+inline constexpr SQUARE_MATRIX SQUARE_MATRIX::getAdjoint() const noexcept
 {
-    SQUARE_MATRIX_ASSERT
+    // SQUARE_MATRIX_ASSERT
 
     return getComatrix().transpose();
 }
 
 SQUARE_MATRIX_TEMPLATE_PARAMETERS
-template<ENABLE_IF_SQUARED_TEMPLATE_PARAMETERS>
-inline SQUARE_MATRIX SQUARE_MATRIX::getInverse() const noexcept
+inline constexpr SQUARE_MATRIX SQUARE_MATRIX::getInverse() const noexcept
 {
-    SQUARE_MATRIX_ASSERT
+    // SQUARE_MATRIX_ASSERT
 
     return getAdjoint() / getDeterminant();
 }
 
 SQUARE_MATRIX_TEMPLATE_PARAMETERS
-template<typename OTHER_MATRIX, typename, ENABLE_IF_SQUARED_TEMPLATE_PARAMETERS>
-inline SQUARE_MATRIX SQUARE_MATRIX::resolveEquation(const OTHER_MATRIX& result) const noexcept
+template<typename OTHER_MATRIX>
+inline constexpr SQUARE_MATRIX SQUARE_MATRIX::resolveEquation(const OTHER_MATRIX& result) const noexcept
 {
-    SQUARE_MATRIX_ASSERT
+    // SQUARE_MATRIX_ASSERT
+    static_assert(OTHER_MATRIX::getNbColumns() == 1, "Columns number shall be 1. If it is not, then it is not an Equation."); // TODO : is this true ?
+    static_assert(this->getNbColumns() == OTHER_MATRIX::getNbRows(), "Multiplication is not possible ; matrix sizes are not coherent."); // is multiplication possible
+        // TODO : isMultiplicationPossible
+    // constexpr bool b = SQUARE_MATRIX::isMultiplicationPossible<OTHER_MATRIX>();
+    // static_assert(b, "ay");
 
     return result * getInverse();
 }
