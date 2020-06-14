@@ -1,6 +1,17 @@
-#include "matrix.hpp"
+#include "matrixBase.hpp"
 #include "squareMatrix.hpp"
 
+#define HAS_MEMBER_STRUCT_NAME HASNAME_x_TYPE_int
+#define HAS_MEMBER_MEMBER_NAME x
+#define HAS_MEMBER_TYPE int
+#include "hasMember.hpp"
+
+#define HAS_MEMBER_STRUCT_NAME HASNAME_x_TYPE_char
+#define HAS_MEMBER_MEMBER_NAME x
+#define HAS_MEMBER_TYPE char
+#include "hasMember.hpp"
+
+// #define ASSERT_VALID_MATRIX static_assert(HASNAME_components_TYPE_stdarray<A>::value);
 
 constexpr Core::Maths::Matrix<1,3,float> getRandMat()
 {
@@ -28,8 +39,19 @@ constexpr Core::Maths::Matrix<3,2,float> getRandMat2()
     return ret;
 }
 #include <vector>
+#include "vec.hpp"
+#include "vec3.hpp"
+
+class A
+{
+public:
+    char x;
+};
+
 int main()
 {
+    std::cout << HASNAME_x_TYPE_char<A>::value << std::endl;
+
     {
         constexpr Core::Maths::Matrix<1,3,float> m1 = getRandMat();
         constexpr Core::Maths::Matrix<3,2,float> m2 = getRandMat2();
@@ -52,6 +74,8 @@ int main()
 
     Core::Maths::Matrix<4, 1, float> r;
     m.resolveEquation(r);
+
+    m.getElements();
 
     // std::cout << m << std::endl;
     // std::cout << m.getInverse() << std::endl;

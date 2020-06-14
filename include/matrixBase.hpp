@@ -2,6 +2,9 @@
 #define _MATRIX_BASE_HPP_
 
 #include <iostream>
+#include <array>
+
+#define CORRECT_MATRIX_ASSERT(mat) static_assert(sizeof(mat) >= mat::childrenMinSizeof())
 
 namespace Core::Maths
 {
@@ -33,6 +36,13 @@ namespace Core::Maths
         inline static constexpr size_t getNbElements() noexcept;
 
         ElemType elements[ROWS * COLUMNS] = {};
+
+        inline constexpr std::array<ElemType, (getNbRows() * getNbColumns())>& getElements() noexcept
+        {
+            static_assert(std::is_standard_layout<SelfType>(), "Can't convert a non standard layout : return value would be unspecified.");
+            static_assert(std::is_standard_layout<std::array<ElemType, (getNbRows() * getNbColumns())>>(), "Can't convert to a non standard layout : return value would be unspecified.");
+            return * reinterpret_cast<std::array<ElemType, (getNbRows() * getNbColumns())>*> (this);
+        }
 
         inline constexpr Matrix() noexcept = default;
         inline constexpr Matrix(const SelfType&) noexcept = default;
@@ -90,10 +100,19 @@ namespace Core::Maths
             static_assert(sizeof(SelfType) <= sizeof(MATRIX), "Can't convert if return type size is not equal or higher than the current type size.");
             return * reinterpret_cast<MATRIX*> (this);
         }
+
+        static constexpr size_t childrenMinSizeof() noexcept
+        {
+            return getNbColumns() * getNbRows() * sizeof(ElemType);
+        }
+
+        template<class CHILDREN_MATRIX>
+        static inline constexpr void raiseAsserts() noexcept
+        {
+            static_assert((!std::is_final<CHILDREN_MATRIX>::value) || sizeof(CHILDREN_MATRIX) >= CHILDREN_MATRIX::childrenMinSizeof(), 
+                        "The size of the class must be atleast CHILDREN_MATRIX::childrenMinSizeof() bytes. Else, MatrixBase wouldn't work correctly.");
+        }
     };
-
-
-
 
     template<size_t RHS_ROWS, size_t RHS_COLUMNS, typename RHS_ELEM_TYPE>
     std::ostream& operator<<(std::ostream& stream, const Core::Maths::Matrix<RHS_ROWS, RHS_COLUMNS, RHS_ELEM_TYPE>& rhs);

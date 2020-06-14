@@ -91,7 +91,7 @@ constexpr SQUARE_MATRIX SQUARE_MATRIX::identity() noexcept
 
     for (size_t i = 0; i < getSize(); i++)
     {
-        returnedMatrix[i * getSize() + i] = static_cast<ELEM_TYPE> (1);
+        returnedMatrix.elements[i * getSize() + i] = static_cast<ELEM_TYPE> (1);
     }
 
     return returnedMatrix;

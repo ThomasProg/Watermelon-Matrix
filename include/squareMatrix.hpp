@@ -9,6 +9,7 @@ namespace Core::Maths
     class SquareMatrix : public Matrix<SIZE, SIZE, ELEM_TYPE>
     {
     protected:
+        using Super = Matrix<SIZE, SIZE, ELEM_TYPE>; 
         using MatType = SquareMatrix<SIZE, ELEM_TYPE>;
 
     protected:
@@ -37,6 +38,11 @@ namespace Core::Maths
         inline constexpr MatType resolveEquation(const OTHER_MATRIX& result) const noexcept;
 
         static constexpr MatType identity() noexcept;
+
+        static inline constexpr void raiseAsserts() noexcept
+        {
+            Super::template raiseAsserts<MatType>();
+        }
     };
 }
 
