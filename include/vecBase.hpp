@@ -11,11 +11,6 @@ namespace Core::Maths
     {
         using SelfType = VecBase<SIZE, ELEM_TYPE>;
         using Super    = Matrix<1, SIZE, ELEM_TYPE>; 
-
-        static inline constexpr void raiseAsserts() noexcept
-        {
-            Super::template raiseAsserts<SelfType>();
-        }
     };
 }
 

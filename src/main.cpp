@@ -1,6 +1,4 @@
-#include "baseMatrix.hpp"
 #include "matrix.hpp"
-#include "squareMatrixBase.hpp"
 #include "squareMatrix.hpp"
 
 // #define HAS_MEMBER_STRUCT_NAME HASNAME_x_TYPE_int
@@ -108,28 +106,34 @@
 
 int main()
 {
-    Core::Maths::Matrix<3,3,float> m1;
-    for (size_t i = 0; i < m1.getNbElements(); i++)
-        m1.getElements()[i] = (float)i;
+    Core::Maths::Matrix<3,3,float> f;
+    Core::Maths::SquareMatrix<3, float> f2 = f.zero();
 
-    Core::Maths::BaseMatrix<Core::Maths::Matrix<3,3,float>, 3,3,float> m2 = m1;
+    Core::Maths::Matrix<3,3,float> f4 = f2.identity();
 
-    std::cout << m2 << std::endl;
+    std::cout << f2 << std::endl;
 
-    m1 = Core::Maths::Matrix<3,3,float>::zero();
-    std::cout << m1 << std::endl;
+    // Core::Maths::Matrix<3,3,float> m1;
+    // for (size_t i = 0; i < m1.getNbElements(); i++)
+    //     m1.getElements()[i] = (float)i;
 
-    Core::Maths::SquareMatrix<3,float> mx = Core::Maths::SquareMatrix<3,float>::zero();
-    Core::Maths::BaseMatrix<Core::Maths::SquareMatrix<3,float>, 3,3,float> mm = mx;
+    // Core::Maths::BaseMatrix<Core::Maths::Matrix<3,3,float>, 3,3,float> m2 = m1;
 
-    
-    Core::Maths::Matrix<3,3,float> mmj = Core::Maths::SquareMatrix<3,float>::zero();
-    Core::Maths::Matrix<3,3,float> mmj2 = Core::Maths::SquareMatrix<3,float>::zero();
-    Core::Maths::SquareMatrix<3,float> m10 = Core::Maths::SquareMatrixBase<Core::Maths::Matrix<3,3,float>, 3,float>(mmj);
+    // std::cout << m2 << std::endl;
 
-    // m1 = Core::Maths::Matrix<3,3,float> (Core::Maths::SquareMatrix<3,float>::zero());
+    // m1 = Core::Maths::Matrix<3,3,float>::zero();
     // std::cout << m1 << std::endl;
 
-    // m1.raiseAsserts();
-    // m1.getElements();
+    // Core::Maths::SquareMatrix<3,float> mx = Core::Maths::SquareMatrix<3,float>::zero();
+    // Core::Maths::BaseMatrix<Core::Maths::SquareMatrix<3,float>, 3,3,float> mm = mx;
+
+    
+    // Core::Maths::Matrix<3,3,float> mmj = Core::Maths::SquareMatrix<3,float>::zero();
+    // Core::Maths::Matrix<3,3,float> mmj2 = Core::Maths::SquareMatrix<3,float>::zero();
+    // Core::Maths::SquareMatrix<3,float> m10 = Core::Maths::SquareMatrixBase<Core::Maths::Matrix<3,3,float>, 3,float>(mmj);
+
+    // // m1 = Core::Maths::Matrix<3,3,float> (Core::Maths::SquareMatrix<3,float>::zero());
+    // // std::cout << m1 << std::endl;
+
+    // // m1.getElements();
 }

@@ -23,11 +23,6 @@ namespace Core::Maths
 
             std::array<ELEM_TYPE, SelfType::getNbElements()> components; 
         };
-
-        static inline constexpr void raiseAsserts() noexcept
-        {
-            Super::template raiseAsserts<SelfType>();
-        }
     };
 }
 

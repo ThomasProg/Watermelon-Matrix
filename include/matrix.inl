@@ -1,9 +1,9 @@
-#include "baseMatrix.hpp"
+#include "matrix.hpp"
 
 #include <cassert>
 
-#define BASE_MATRIX_TEMPLATE_PARAMETERS template<class CHILD, size_t ROWS, size_t COLUMNS, typename ELEM_TYPE>
-#define BASE_MATRIX Core::Maths::BaseMatrix<CHILD, ROWS, COLUMNS, ELEM_TYPE>
+#define BASE_MATRIX_TEMPLATE_PARAMETERS template<size_t ROWS, size_t COLUMNS, typename ELEM_TYPE>
+#define BASE_MATRIX Core::Maths::Matrix<ROWS, COLUMNS, ELEM_TYPE>
 
 BASE_MATRIX_TEMPLATE_PARAMETERS
 inline constexpr size_t BASE_MATRIX::getNbRows() noexcept
@@ -36,7 +36,7 @@ constexpr BASE_MATRIX BASE_MATRIX::operator+(const BASE_MATRIX& rhs) noexcept
     BASE_MATRIX returnedMatrix;
     for (size_t i = 0; i < getNbElements(); i++)
     {
-        returnedMatrix.getElements()[i] = getElements()[i] + rhs.getElements()[i];
+        returnedMatrix.elements[i] = elements[i] + rhs.elements[i];
     }
 
     return returnedMatrix;
@@ -48,7 +48,7 @@ constexpr BASE_MATRIX BASE_MATRIX::operator-(const BASE_MATRIX& rhs) noexcept
     BASE_MATRIX returnedMatrix;
     for (size_t i = 0; i < getNbElements(); i++)
     {
-        returnedMatrix.getElements()[i] = getElements()[i] - rhs.getElements()[i];
+        returnedMatrix.elements[i] = elements[i] - rhs.elements[i];
     }
 
     return returnedMatrix;
@@ -60,7 +60,7 @@ constexpr BASE_MATRIX BASE_MATRIX::operator*(const BASE_MATRIX& rhs) const noexc
     BASE_MATRIX returnedMatrix;
     for (size_t i = 0; i < getNbElements(); i++)
     {
-        returnedMatrix.getElements()[i] = getElements()[i] * rhs.getElements()[i];
+        returnedMatrix.elements[i] = elements[i] * rhs.elements[i];
     }
 
     return returnedMatrix;
@@ -72,7 +72,7 @@ constexpr BASE_MATRIX BASE_MATRIX::operator*(ELEM_TYPE rhs) const noexcept
     BASE_MATRIX returnedMatrix;
     for (size_t i = 0; i < getNbElements(); i++)
     {
-        returnedMatrix.getElements()[i] = getElements()[i] * rhs;
+        returnedMatrix.elements[i] = elements[i] * rhs;
     }
 
     return returnedMatrix;
@@ -84,7 +84,7 @@ constexpr BASE_MATRIX BASE_MATRIX::operator/(ELEM_TYPE rhs) const noexcept
     BASE_MATRIX returnedMatrix;
     for (size_t i = 0; i < getNbElements(); i++)
     {
-        returnedMatrix.getElements()[i] = getElements()[i] / rhs;
+        returnedMatrix.elements[i] = elements[i] / rhs;
     }
 
     return returnedMatrix;
@@ -95,7 +95,7 @@ constexpr BASE_MATRIX& BASE_MATRIX::operator*=(ELEM_TYPE rhs) noexcept
 {
     for (size_t i = 0; i < getNbElements(); i++)
     {
-        getElements()[i] *= rhs;
+        elements[i] *= rhs;
     }
 
     return (*this);
@@ -106,7 +106,7 @@ constexpr BASE_MATRIX& BASE_MATRIX::operator/=(ELEM_TYPE rhs) noexcept
 {
     for (size_t i = 0; i < getNbElements(); i++)
     {
-        getElements()[i] /= rhs;
+        elements[i] /= rhs;
     }
 
     return (*this);
@@ -116,14 +116,14 @@ BASE_MATRIX_TEMPLATE_PARAMETERS
 constexpr ELEM_TYPE const * BASE_MATRIX::operator[](size_t id) const noexcept
 {
     assert(id < getNbRows());
-    return &this->getElements()[id * getNbColumns()];
+    return &this->elements[id * getNbColumns()];
 }
 
 BASE_MATRIX_TEMPLATE_PARAMETERS
 constexpr ELEM_TYPE* BASE_MATRIX::operator[](size_t id) noexcept
 {
     assert(id < getNbRows());
-    return &(this->getElements()[id * getNbColumns()]);
+    return &(this->elements[id * getNbColumns()]);
 }
 
 BASE_MATRIX_TEMPLATE_PARAMETERS
@@ -161,7 +161,7 @@ constexpr bool BASE_MATRIX::operator==(const BASE_MATRIX& rhs) const noexcept
 {
     for (size_t i = 0; i < getNbElements(); i++)
     {
-        if (getElements()[i] != rhs.getElements()[i])
+        if (elements[i] != rhs.elements[i])
             return false; 
     }
 
@@ -179,7 +179,7 @@ BASE_MATRIX_TEMPLATE_PARAMETERS
 template<typename OTHER_MATRIX>
 inline constexpr bool BASE_MATRIX::isMatrix()
 {
-    return std::is_base_of<BaseMatrix, OTHER_MATRIX>::value;
+    return std::is_base_of<Matrix, OTHER_MATRIX>::value;
 }
 
 BASE_MATRIX_TEMPLATE_PARAMETERS
@@ -188,7 +188,7 @@ constexpr BASE_MATRIX BASE_MATRIX::zero() noexcept
     BASE_MATRIX returnedMatrix;
     for (size_t i = 0; i < getNbElements(); i++)
     {
-        returnedMatrix.getElements()[i] = static_cast<ELEM_TYPE> (0);
+        returnedMatrix.elements[i] = static_cast<ELEM_TYPE> (0);
     }
 
     return returnedMatrix;
@@ -206,11 +206,11 @@ constexpr Core::Maths::Matrix<ROWS, OTHER_MATRIX::getNbColumns(), ELEM_TYPE> // 
         const size_t jAdded = j * rhs.getNbColumns(); 
         for (size_t i = 0; i < rhs.getNbColumns(); i++)
         {
-            ELEM_TYPE& elem = result.getElements()[i + jAdded];
+            ELEM_TYPE& elem = result.elements[i + jAdded];
             elem = 0;
             for (size_t k = 0; k < getNbColumns(); k++)
             {
-                elem += getElements()[k + jAdded] * rhs.getElements()[k * rhs.getNbColumns() + i];
+                elem += elements[k + jAdded] * rhs.elements[k * rhs.getNbColumns() + i];
             }
         }
     }
@@ -271,14 +271,14 @@ constexpr Core::Maths::Matrix<ROWS - 1, COLUMNS - 1, ELEM_TYPE> // return type
     return subMatrix;   
 }
 
-template<class RHS_CHILD, size_t RHS_ROWS, size_t RHS_COLUMNS, typename RHS_ELEM_TYPE>
-std::ostream& Core::Maths::operator<<(std::ostream& stream, const Core::Maths::BaseMatrix<RHS_CHILD, RHS_ROWS, RHS_COLUMNS, RHS_ELEM_TYPE>& rhs)
+template<size_t RHS_ROWS, size_t RHS_COLUMNS, typename RHS_ELEM_TYPE>
+std::ostream& Core::Maths::operator<<(std::ostream& stream, const Core::Maths::Matrix<RHS_ROWS, RHS_COLUMNS, RHS_ELEM_TYPE>& rhs)
 {
     for (size_t i = 0; i < RHS_ROWS; i++)
     {
         for (size_t j = 0; j < RHS_COLUMNS; j++)
         {
-            stream << rhs.getElements()[j + i * RHS_COLUMNS] << '\t';
+            stream << rhs.elements[j + i * RHS_COLUMNS] << '\t';
         }
         std::cout << '\n';
     }
