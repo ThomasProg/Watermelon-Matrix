@@ -1,7 +1,7 @@
 #ifndef _VEC_BASE_HPP_
 #define _VEC_BASE_HPP_
 
-#include "matrixBase.hpp"
+#include "baseMatrix.hpp"
 #include <array>
 
 namespace Core::Maths

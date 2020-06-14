@@ -1,5 +1,5 @@
-#ifndef _MATRIX_BASE_HPP_
-#define _MATRIX_BASE_HPP_
+#ifndef _BASE_MATRIX_HPP_
+#define _BASE_MATRIX_HPP_
 
 #include <iostream>
 #include <array>
@@ -11,18 +11,11 @@ namespace Core::Maths
     template<size_t ROWS, size_t COLUMNS, typename ELEM_TYPE>
     class Matrix;
 
-    // TODO : put private
-    class MatrixBase 
+    template<class CHILD, size_t ROWS, size_t COLUMNS, typename ELEM_TYPE>
+    class BaseMatrix 
     {
     protected:
-        ~MatrixBase() = default; // forbids instanciation
-    };
-
-    template<size_t ROWS, size_t COLUMNS, typename ELEM_TYPE>
-    class Matrix : private MatrixBase
-    {
-    protected:
-        using SelfType = Matrix<ROWS, COLUMNS, ELEM_TYPE>;
+        using SelfType  = BaseMatrix<CHILD, ROWS, COLUMNS, ELEM_TYPE>;
 
     public:
         using ElemType = ELEM_TYPE;
@@ -35,29 +28,46 @@ namespace Core::Maths
         inline static constexpr size_t getNbColumns()  noexcept;
         inline static constexpr size_t getNbElements() noexcept;
 
-        ElemType elements[ROWS * COLUMNS] = {};
+        // ElemType elements[ROWS * COLUMNS] = {};
 
-        inline constexpr ElemType* getElements() noexcept
+        inline constexpr std::array<ElemType, getNbElements()>& getElements() noexcept
         {
             static_assert(std::is_standard_layout<SelfType>(), "Can't convert a non standard layout : return value would be unspecified.");
             static_assert(std::is_standard_layout<std::array<ElemType, (getNbRows() * getNbColumns())>>(), "Can't convert to a non standard layout : return value would be unspecified.");
-            return elements;// reinterpret_cast<ElemType*> (this);
+            return ((reinterpret_cast<CHILD*> (this)) ->array);// reinterpret_cast<ElemType*> (this);
         }
 
-        inline constexpr const ElemType* getElements() const noexcept
+        inline constexpr const std::array<ElemType, getNbElements()>& getElements() const noexcept
         {
             static_assert(std::is_standard_layout<SelfType>(), "Can't convert a non standard layout : return value would be unspecified.");
             static_assert(std::is_standard_layout<std::array<ElemType, (getNbRows() * getNbColumns())>>(), "Can't convert to a non standard layout : return value would be unspecified.");
-            return elements;// reinterpret_cast<const ElemType*> (this);
+            return ((reinterpret_cast<const CHILD*> (this)) ->array);// reinterpret_cast<const ElemType*> (this);
         }
 
-        inline constexpr Matrix() noexcept = default;
-        inline constexpr Matrix(const SelfType&) noexcept = default;
-        inline constexpr Matrix(SelfType&&) noexcept = default;
-        inline ~Matrix() noexcept = default;
+    public:
+        inline constexpr BaseMatrix() noexcept = default;
+        inline constexpr BaseMatrix(const SelfType& rhs) noexcept
+        {
+            getElements() = rhs.getElements();
+        }
+        inline constexpr BaseMatrix(SelfType&& rhs) noexcept
+        {
+            getElements() = std::move(rhs.getElements());
+        }
+        inline ~BaseMatrix() noexcept = default;
+    public:
+        constexpr SelfType& operator=(const SelfType& rhs) noexcept
+        {
+            getElements() = rhs.getElements();
+            return *this;
+        }
 
-        constexpr SelfType& operator=(const SelfType&) noexcept = default;
-        constexpr SelfType& operator=(SelfType&&)      noexcept = default;
+        constexpr SelfType& operator=(SelfType&& rhs)      noexcept
+        {
+            getElements() = std::move(rhs.getElements());
+            return *this;
+        }
+
 
         constexpr SelfType operator+(const SelfType& rhs) noexcept;
         constexpr SelfType operator-(const SelfType& rhs) noexcept;
@@ -79,7 +89,7 @@ namespace Core::Maths
         inline static constexpr bool isMatrix();
 
         template<typename OTHER_MATRIX>
-        using EnableIfMatrix = std::enable_if_t<std::is_base_of<MatrixBase, OTHER_MATRIX>::value>;
+        using EnableIfMatrix = std::enable_if_t<std::is_base_of<BaseMatrix, OTHER_MATRIX>::value>;
 
         template<typename OTHER_MATRIX, typename = EnableIfMatrix<OTHER_MATRIX>>
         inline static constexpr bool isMultiplicationPossible();
@@ -108,6 +118,11 @@ namespace Core::Maths
             return * reinterpret_cast<MATRIX*> (this);
         }
 
+        inline constexpr operator Core::Maths::Matrix<getNbRows(), getNbColumns(), ElemType>() noexcept
+        {
+            return * reinterpret_cast<Core::Maths::Matrix<getNbRows(), getNbColumns(), ElemType>*> (this);
+        }
+
         static constexpr size_t childrenMinSizeof() noexcept
         {
             return getNbColumns() * getNbRows() * sizeof(ElemType);
@@ -119,27 +134,24 @@ namespace Core::Maths
             return std::is_same<std::remove_const_t<TESTED_TYPE>, std::remove_const_t<OTHER_TYPE>>::value;
         }
 
-        template<class CHILDREN_MATRIX>
         static inline constexpr void raiseAsserts() noexcept
         {
             constexpr ElemType elementsAssertion[ROWS * COLUMNS] = {};
             constexpr std::array<ElemType, ROWS * COLUMNS> arrayAssertion = {};
-            constexpr ElemType* ptrAssertion = nullptr;
 
-            static_assert(SelfType::isValid<decltype(CHILDREN_MATRIX::elements), decltype(elementsAssertion)>(), "NOOO");
-            // static_assert(SelfType::isValid<decltype(CHILDREN_MATRIX::array),    decltype(arrayAssertion)>()   , "NOOO");
-            // static_assert(SelfType::isValid<decltype(CHILDREN_MATRIX::ptr),      decltype(ptrAssertion)>()     , "NOOO");
+            static_assert(SelfType::isValid<decltype(CHILD::elements), decltype(elementsAssertion)>(), "NOOO");
+            static_assert(SelfType::isValid<decltype(CHILD::array),    decltype(arrayAssertion)>()   , "NOOO");
             
-            static_assert((!std::is_final<CHILDREN_MATRIX>::value) || sizeof(CHILDREN_MATRIX) >= CHILDREN_MATRIX::childrenMinSizeof(), 
-                        "The size of the class must be atleast CHILDREN_MATRIX::childrenMinSizeof() bytes. Else, MatrixBase wouldn't work correctly.");
-            static_assert(std::is_standard_layout<CHILDREN_MATRIX>(), "CHILDREN_MATRIX should have a standard layout, or parent functions would be unspecified.");
+            static_assert((!std::is_final<CHILD>::value) || sizeof(CHILD) >= CHILD::childrenMinSizeof(), 
+                        "The size of the class must be atleast CHILD::childrenMinSizeof() bytes. Else, MatrixBase wouldn't work correctly.");
+            static_assert(std::is_standard_layout<CHILD>(), "CHILD should have a standard layout, or parent functions would be unspecified.");
         }
     };
 
-    template<size_t RHS_ROWS, size_t RHS_COLUMNS, typename RHS_ELEM_TYPE>
-    std::ostream& operator<<(std::ostream& stream, const Core::Maths::Matrix<RHS_ROWS, RHS_COLUMNS, RHS_ELEM_TYPE>& rhs);
+    template<typename RHS_CHILD, size_t RHS_ROWS, size_t RHS_COLUMNS, typename RHS_ELEM_TYPE>
+    std::ostream& operator<<(std::ostream& stream, const Core::Maths::BaseMatrix<RHS_CHILD, RHS_ROWS, RHS_COLUMNS, RHS_ELEM_TYPE>& rhs);
 }
 
-#include "matrixBase.inl"
+#include "baseMatrix.inl"
 
 #endif

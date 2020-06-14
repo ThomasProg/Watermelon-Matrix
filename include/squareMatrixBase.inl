@@ -1,7 +1,7 @@
 #include "squareMatrixBase.hpp"
 
-#define SQUARE_MATRIX_BASE_TEMPLATE_PARAMETERS template<size_t SIZE, typename ELEM_TYPE> 
-#define SQUARE_MATRIX_BASE Core::Maths::SquareMatrixBase<SIZE, ELEM_TYPE>
+#define SQUARE_MATRIX_BASE_TEMPLATE_PARAMETERS template<class CHILD, size_t SIZE, typename ELEM_TYPE> 
+#define SQUARE_MATRIX_BASE Core::Maths::SquareMatrixBase<CHILD, SIZE, ELEM_TYPE>
 
 SQUARE_MATRIX_BASE_TEMPLATE_PARAMETERS  
 // template<ENABLE_IF_SQUARED_TEMPLATE_PARAMETERS>
@@ -43,7 +43,7 @@ constexpr SQUARE_MATRIX_BASE SQUARE_MATRIX_BASE::getTransposed() const noexcept
 {
     // SQUARE_MATRIX_BASE_ASSERT
 
-    Core::Maths::SquareMatrixBase<getSize(), ELEM_TYPE> returnedMatrix;
+    SQUARE_MATRIX_BASE returnedMatrix;
 
     for (size_t i = 0; i < getSize(); i++)
     {
@@ -87,7 +87,7 @@ constexpr SQUARE_MATRIX_BASE SQUARE_MATRIX_BASE::identity() noexcept
 {
     // SQUARE_MATRIX_BASE_ASSERT
 
-    Core::Maths::SquareMatrixBase<getSize(), ELEM_TYPE> returnedMatrix = Core::Maths::SquareMatrixBase<getSize(), ELEM_TYPE>::zero();
+    constexpr SQUARE_MATRIX_BASE returnedMatrix = Core::Maths::SquareMatrixBase<SelfType, getSize(), ELEM_TYPE>::zero();
 
     for (size_t i = 0; i < getSize(); i++)
     {
@@ -117,7 +117,7 @@ constexpr ELEM_TYPE SQUARE_MATRIX_BASE::getDeterminant(typename std::enable_if<(
     float sign = 1.f;
     for (size_t i = 0; i < getSize(); i++)
     {
-        Core::Maths::SquareMatrixBase<getSize() - 1, ELEM_TYPE> subMatrix = (this->getSubMatrix(i, 0));
+        Core::Maths::SquareMatrixBase<SelfType, getSize() - 1, ELEM_TYPE> subMatrix = (this->getSubMatrix(i, 0));
         det += (*this)[i][0] * subMatrix.getDeterminant() * sign;
         sign *= -1;
     }
@@ -139,7 +139,7 @@ inline constexpr ELEM_TYPE SQUARE_MATRIX_BASE::getMinorant(size_t excludedRowInd
     // SQUARE_MATRIX_BASE_ASSERT
 
     // TODO : Sfinae
-    return Core::Maths::SquareMatrixBase<SIZE - 1, ELEM_TYPE>(this->getSubMatrix(excludedRowIndex, excludedColumnIndex)).getDeterminant();
+    return Core::Maths::SquareMatrixBase<SelfType, SIZE - 1, ELEM_TYPE>(this->getSubMatrix(excludedRowIndex, excludedColumnIndex)).getDeterminant();
 }
 
 SQUARE_MATRIX_BASE_TEMPLATE_PARAMETERS
@@ -158,7 +158,7 @@ constexpr SQUARE_MATRIX_BASE SQUARE_MATRIX_BASE::getComatrix() const noexcept
 {
     // SQUARE_MATRIX_BASE_ASSERT
 
-    SquareMatrixBase<getSize(), ELEM_TYPE> comatrix;
+    SquareMatrixBase<SelfType, getSize(), ELEM_TYPE> comatrix;
 
     for (size_t i = 0; i < this->getNbRows(); i++)
     {

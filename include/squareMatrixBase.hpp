@@ -1,26 +1,31 @@
 #ifndef _SQUARE_MATRIX_BASE_HPP_
 #define _SQUARE_MATRIX_BASE_HPP_
 
-#include "matrixBase.hpp"
+#include "baseMatrix.hpp"
 
 namespace Core::Maths
 {
     template<size_t SIZE, typename ELEM_TYPE>
-    class SquareMatrixBase : public Matrix<SIZE, SIZE, ELEM_TYPE>
+    class SquareMatrix;
+
+    template<class CHILD, size_t SIZE, typename ELEM_TYPE>
+    class SquareMatrixBase : public BaseMatrix<CHILD, SIZE, SIZE, ELEM_TYPE>
     {
     protected:
-        using Super = Matrix<SIZE, SIZE, ELEM_TYPE>; 
-        using MatType = SquareMatrixBase<SIZE, ELEM_TYPE>;
+        using Super            = BaseMatrix<CHILD, SIZE, SIZE, ELEM_TYPE>; 
+        using SelfType         = SquareMatrixBase<CHILD, SIZE, ELEM_TYPE>;
+        // using SquareMatrixEq   = SquareMatrixBase<CHILD, SIZE, ELEM_TYPE>;
+        using ChildType        = CHILD;
 
     protected:
-        constexpr void copyDiagonaleFrom(const MatType& copiedFrom) noexcept;
+        constexpr void copyDiagonaleFrom(const SelfType& copiedFrom) noexcept;
         constexpr void setDiagonaleTo(const ELEM_TYPE& value) noexcept;
 
     public:
         inline static constexpr size_t getSize() noexcept;
 
-        constexpr MatType  getTransposed() const noexcept;
-        constexpr MatType& transpose() noexcept;
+        constexpr SelfType  getTransposed() const noexcept;
+        constexpr SelfType& transpose() noexcept;
 
         template<size_t SELF_SIZE = SIZE>
         constexpr ELEM_TYPE getDeterminant(typename std::enable_if<(SELF_SIZE > 1)>::type* = nullptr) const noexcept; // stops recursion
@@ -30,18 +35,23 @@ namespace Core::Maths
         inline constexpr bool isOrthogonal() const noexcept;
         inline constexpr ELEM_TYPE getMinorant(size_t excludedRowIndex, size_t excludedColumnIndex) const noexcept;
         inline constexpr ELEM_TYPE  getCofactor(size_t column, size_t line) const noexcept;
-        constexpr MatType getComatrix() const noexcept;
-        inline constexpr MatType getAdjoint() const noexcept;
-        inline constexpr MatType getInverse() const noexcept;
+        constexpr SelfType getComatrix() const noexcept;
+        inline constexpr SelfType getAdjoint() const noexcept;
+        inline constexpr SelfType getInverse() const noexcept;
 
         template<typename OTHER_MATRIX>
-        inline constexpr MatType resolveEquation(const OTHER_MATRIX& result) const noexcept;
+        inline constexpr SelfType resolveEquation(const OTHER_MATRIX& result) const noexcept;
 
-        static constexpr MatType identity() noexcept;
+        static constexpr SelfType identity() noexcept;
 
         static inline constexpr void raiseAsserts() noexcept
         {
-            Super::template raiseAsserts<MatType>();
+            Super::raiseAsserts();
+        }
+
+        inline constexpr operator Core::Maths::SquareMatrix<SelfType::getSize(), typename Super::ElemType>() noexcept
+        {
+            return * reinterpret_cast<Core::Maths::SquareMatrix<SelfType::getSize(), typename Super::ElemType>*> (this);
         }
     };
 }
