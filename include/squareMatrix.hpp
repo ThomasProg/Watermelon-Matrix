@@ -1,7 +1,7 @@
 #ifndef _SQUARE_MATRIX_HPP_
 #define _SQUARE_MATRIX_HPP_
 
-#include "matrix.hpp"
+#include "matrixBase.hpp"
 
 namespace Core::Maths
 {

@@ -1,5 +1,5 @@
-#ifndef _MATRIX_HPP_
-#define _MATRIX_HPP_
+#ifndef _MATRIX_BASE_HPP_
+#define _MATRIX_BASE_HPP_
 
 #include <iostream>
 
@@ -7,14 +7,6 @@ namespace Core::Maths
 {
     template<size_t ROWS, size_t COLUMNS, typename ELEM_TYPE>
     class Matrix;
-
-    // template<size_t SIZE, typename ELEM_TYPE>
-    // using SquareMatrix = Matrix<SIZE, SIZE, ELEM_TYPE>;
-
-    template<typename ELEM_TYPE>
-    using Vec3 = Matrix<1, 3, ELEM_TYPE>;
-
-    using Vec3f = Matrix<1, 3, float>;
 
     // TODO : put private
     class MatrixBase 
@@ -101,10 +93,12 @@ namespace Core::Maths
     };
 
 
+
+
     template<size_t RHS_ROWS, size_t RHS_COLUMNS, typename RHS_ELEM_TYPE>
     std::ostream& operator<<(std::ostream& stream, const Core::Maths::Matrix<RHS_ROWS, RHS_COLUMNS, RHS_ELEM_TYPE>& rhs);
 }
 
-#include "matrix.inl"
+#include "matrixBase.inl"
 
 #endif
