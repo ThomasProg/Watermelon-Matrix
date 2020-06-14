@@ -37,11 +37,18 @@ namespace Core::Maths
 
         ElemType elements[ROWS * COLUMNS] = {};
 
-        inline constexpr std::array<ElemType, (getNbRows() * getNbColumns())>& getElements() noexcept
+        inline constexpr ElemType* getElements() noexcept
         {
             static_assert(std::is_standard_layout<SelfType>(), "Can't convert a non standard layout : return value would be unspecified.");
             static_assert(std::is_standard_layout<std::array<ElemType, (getNbRows() * getNbColumns())>>(), "Can't convert to a non standard layout : return value would be unspecified.");
-            return * reinterpret_cast<std::array<ElemType, (getNbRows() * getNbColumns())>*> (this);
+            return elements;// reinterpret_cast<ElemType*> (this);
+        }
+
+        inline constexpr const ElemType* getElements() const noexcept
+        {
+            static_assert(std::is_standard_layout<SelfType>(), "Can't convert a non standard layout : return value would be unspecified.");
+            static_assert(std::is_standard_layout<std::array<ElemType, (getNbRows() * getNbColumns())>>(), "Can't convert to a non standard layout : return value would be unspecified.");
+            return elements;// reinterpret_cast<const ElemType*> (this);
         }
 
         inline constexpr Matrix() noexcept = default;
@@ -106,11 +113,26 @@ namespace Core::Maths
             return getNbColumns() * getNbRows() * sizeof(ElemType);
         }
 
+        template<typename TESTED_TYPE, typename OTHER_TYPE>
+        static constexpr bool isValid()
+        {
+            return std::is_same<std::remove_const_t<TESTED_TYPE>, std::remove_const_t<OTHER_TYPE>>::value;
+        }
+
         template<class CHILDREN_MATRIX>
         static inline constexpr void raiseAsserts() noexcept
         {
+            constexpr ElemType elementsAssertion[ROWS * COLUMNS] = {};
+            constexpr std::array<ElemType, ROWS * COLUMNS> arrayAssertion = {};
+            constexpr ElemType* ptrAssertion = nullptr;
+
+            static_assert(SelfType::isValid<decltype(CHILDREN_MATRIX::elements), decltype(elementsAssertion)>(), "NOOO");
+            // static_assert(SelfType::isValid<decltype(CHILDREN_MATRIX::array),    decltype(arrayAssertion)>()   , "NOOO");
+            // static_assert(SelfType::isValid<decltype(CHILDREN_MATRIX::ptr),      decltype(ptrAssertion)>()     , "NOOO");
+            
             static_assert((!std::is_final<CHILDREN_MATRIX>::value) || sizeof(CHILDREN_MATRIX) >= CHILDREN_MATRIX::childrenMinSizeof(), 
                         "The size of the class must be atleast CHILDREN_MATRIX::childrenMinSizeof() bytes. Else, MatrixBase wouldn't work correctly.");
+            static_assert(std::is_standard_layout<CHILDREN_MATRIX>(), "CHILDREN_MATRIX should have a standard layout, or parent functions would be unspecified.");
         }
     };
 

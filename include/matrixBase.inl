@@ -34,7 +34,7 @@ constexpr Core::Maths::Matrix<ROWS, COLUMNS, ELEM_TYPE>
     Core::Maths::Matrix<ROWS, COLUMNS, ELEM_TYPE> returnedMatrix;
     for (size_t i = 0; i < getNbElements(); i++)
     {
-        returnedMatrix.elements[i] = elements[i] + rhs.elements[i];
+        returnedMatrix.getElements()[i] = getElements()[i] + rhs.getElements()[i];
     }
 
     return returnedMatrix;
@@ -47,7 +47,7 @@ constexpr Core::Maths::Matrix<ROWS, COLUMNS, ELEM_TYPE>
     Core::Maths::Matrix<ROWS, COLUMNS, ELEM_TYPE> returnedMatrix;
     for (size_t i = 0; i < getNbElements(); i++)
     {
-        returnedMatrix.elements[i] = elements[i] - rhs.elements[i];
+        returnedMatrix.getElements()[i] = getElements()[i] - rhs.getElements()[i];
     }
 
     return returnedMatrix;
@@ -60,7 +60,7 @@ constexpr Core::Maths::Matrix<ROWS, COLUMNS, ELEM_TYPE>
     Core::Maths::Matrix<ROWS, COLUMNS, ELEM_TYPE> returnedMatrix;
     for (size_t i = 0; i < getNbElements(); i++)
     {
-        returnedMatrix.elements[i] = elements[i] * rhs.elements[i];
+        returnedMatrix.getElements()[i] = getElements()[i] * rhs.getElements()[i];
     }
 
     return returnedMatrix;
@@ -73,7 +73,7 @@ constexpr Core::Maths::Matrix<ROWS, COLUMNS, ELEM_TYPE>
     Core::Maths::Matrix<ROWS, COLUMNS, ELEM_TYPE> returnedMatrix;
     for (size_t i = 0; i < getNbElements(); i++)
     {
-        returnedMatrix.elements[i] = elements[i] * rhs;
+        returnedMatrix.getElements()[i] = getElements()[i] * rhs;
     }
 
     return returnedMatrix;
@@ -86,7 +86,7 @@ constexpr Core::Maths::Matrix<ROWS, COLUMNS, ELEM_TYPE>
     Core::Maths::Matrix<ROWS, COLUMNS, ELEM_TYPE> returnedMatrix;
     for (size_t i = 0; i < getNbElements(); i++)
     {
-        returnedMatrix.elements[i] = elements[i] / rhs;
+        returnedMatrix.getElements()[i] = getElements()[i] / rhs;
     }
 
     return returnedMatrix;
@@ -98,7 +98,7 @@ constexpr Core::Maths::Matrix<ROWS, COLUMNS, ELEM_TYPE>&
 {
     for (size_t i = 0; i < getNbElements(); i++)
     {
-        elements[i] *= rhs;
+        getElements()[i] *= rhs;
     }
 
     return (*this);
@@ -110,7 +110,7 @@ constexpr Core::Maths::Matrix<ROWS, COLUMNS, ELEM_TYPE>&
 {
     for (size_t i = 0; i < getNbElements(); i++)
     {
-        elements[i] /= rhs;
+        getElements()[i] /= rhs;
     }
 
     return (*this);
@@ -121,7 +121,7 @@ constexpr ELEM_TYPE const *
     Core::Maths::Matrix<ROWS, COLUMNS, ELEM_TYPE>::operator[](size_t id) const noexcept
 {
     assert(id < getNbRows());
-    return &this->elements[id * getNbColumns()];
+    return &this->getElements()[id * getNbColumns()];
 }
 
 template<size_t ROWS, size_t COLUMNS, typename ELEM_TYPE>
@@ -129,7 +129,7 @@ constexpr ELEM_TYPE*
     Core::Maths::Matrix<ROWS, COLUMNS, ELEM_TYPE>::operator[](size_t id) noexcept
 {
     assert(id < getNbRows());
-    return &this->elements[id * getNbColumns()];
+    return &(this->getElements()[id * getNbColumns()]);
 }
 
 template<size_t ROWS, size_t COLUMNS, typename ELEM_TYPE>
@@ -170,7 +170,7 @@ constexpr bool
 {
     for (size_t i = 0; i < getNbElements(); i++)
     {
-        if (elements[i] != rhs.elements[i])
+        if (getElements()[i] != rhs.getElements()[i])
             return false; 
     }
 
@@ -198,7 +198,7 @@ constexpr Core::Maths::Matrix<ROWS, COLUMNS, ELEM_TYPE>
     Core::Maths::Matrix<ROWS, COLUMNS, ELEM_TYPE> returnedMatrix;
     for (size_t i = 0; i < getNbElements(); i++)
     {
-        returnedMatrix.elements[i] = static_cast<ELEM_TYPE> (0);
+        returnedMatrix.getElements()[i] = static_cast<ELEM_TYPE> (0);
     }
 
     return returnedMatrix;
@@ -216,11 +216,11 @@ constexpr Core::Maths::Matrix<ROWS, OTHER_MATRIX::getNbColumns(), ELEM_TYPE> // 
         const size_t jAdded = j * rhs.getNbColumns(); 
         for (size_t i = 0; i < rhs.getNbColumns(); i++)
         {
-            ELEM_TYPE& elem = result.elements[i + jAdded];
+            ELEM_TYPE& elem = result.getElements()[i + jAdded];
             elem = 0;
             for (size_t k = 0; k < getNbColumns(); k++)
             {
-                elem += elements[k + jAdded] * rhs.elements[k * rhs.getNbColumns() + i];
+                elem += getElements()[k + jAdded] * rhs.getElements()[k * rhs.getNbColumns() + i];
             }
         }
     }
@@ -288,7 +288,7 @@ std::ostream& Core::Maths::operator<<(std::ostream& stream, const Core::Maths::M
     {
         for (size_t j = 0; j < RHS_COLUMNS; j++)
         {
-            stream << rhs.elements[j + i * RHS_COLUMNS] << '\t';
+            stream << rhs.getElements()[j + i * RHS_COLUMNS] << '\t';
         }
         std::cout << '\n';
     }

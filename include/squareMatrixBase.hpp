@@ -1,16 +1,16 @@
-#ifndef _SQUARE_MATRIX_HPP_
-#define _SQUARE_MATRIX_HPP_
+#ifndef _SQUARE_MATRIX_BASE_HPP_
+#define _SQUARE_MATRIX_BASE_HPP_
 
 #include "matrixBase.hpp"
 
 namespace Core::Maths
 {
     template<size_t SIZE, typename ELEM_TYPE>
-    class SquareMatrix : public Matrix<SIZE, SIZE, ELEM_TYPE>
+    class SquareMatrixBase : public Matrix<SIZE, SIZE, ELEM_TYPE>
     {
     protected:
         using Super = Matrix<SIZE, SIZE, ELEM_TYPE>; 
-        using MatType = SquareMatrix<SIZE, ELEM_TYPE>;
+        using MatType = SquareMatrixBase<SIZE, ELEM_TYPE>;
 
     protected:
         constexpr void copyDiagonaleFrom(const MatType& copiedFrom) noexcept;
@@ -46,7 +46,7 @@ namespace Core::Maths
     };
 }
 
-#include "squareMatrix.inl"
+#include "squareMatrixBase.inl"
 
 #endif
 

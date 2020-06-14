@@ -1,14 +1,12 @@
 #include "matrixBase.hpp"
-#include "squareMatrix.hpp"
+#include "squareMatrixBase.hpp"
 
 #define HAS_MEMBER_STRUCT_NAME HASNAME_x_TYPE_int
 #define HAS_MEMBER_MEMBER_NAME x
-#define HAS_MEMBER_TYPE int
 #include "hasMember.hpp"
 
 #define HAS_MEMBER_STRUCT_NAME HASNAME_x_TYPE_char
 #define HAS_MEMBER_MEMBER_NAME x
-#define HAS_MEMBER_TYPE char
 #include "hasMember.hpp"
 
 // #define ASSERT_VALID_MATRIX static_assert(HASNAME_components_TYPE_stdarray<A>::value);
@@ -39,7 +37,7 @@ constexpr Core::Maths::Matrix<3,2,float> getRandMat2()
     return ret;
 }
 #include <vector>
-#include "vec.hpp"
+#include "vecBase.hpp"
 #include "vec3.hpp"
 
 class A
@@ -66,7 +64,7 @@ int main()
     // constexpr bool b = Core::Maths::Matrix<1,3,double>::isMultiplicationPossible<Core::Maths::Matrix<3,1,std::vector<int>>>();
     // std::cout << (b ? "yes" : "nop") << std::endl;
 
-    Core::Maths::SquareMatrix<4, float> m = Core::Maths::Matrix<4, 4, float>::zero();
+    Core::Maths::SquareMatrixBase<4, float> m = Core::Maths::Matrix<4, 4, float>::zero();
     for (uint i = 0; i < 3; i++)
     {
         m[i][i] = 4;
@@ -76,6 +74,8 @@ int main()
     m.resolveEquation(r);
 
     m.getElements();
+
+    std::cout << sizeof(Core::Maths::Vec3<float>) << std::endl;
 
     // std::cout << m << std::endl;
     // std::cout << m.getInverse() << std::endl;
