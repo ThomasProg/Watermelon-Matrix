@@ -12,10 +12,13 @@ namespace Core::Maths
     class SquareMatrixBase : public BaseMatrix<CHILD, SIZE, SIZE, ELEM_TYPE>
     {
     protected:
+        // Parent Type
         using Super            = BaseMatrix<CHILD, SIZE, SIZE, ELEM_TYPE>; 
+        // Type of the current Matrix
         using SelfType         = SquareMatrixBase<CHILD, SIZE, ELEM_TYPE>;
-        // using SquareMatrixEq   = SquareMatrixBase<CHILD, SIZE, ELEM_TYPE>;
-        using ChildType        = CHILD;
+        // Equivalent Type
+        using EqType           = SquareMatrix<SIZE, ELEM_TYPE>;
+        using ElemType  = ELEM_TYPE;
 
     protected:
         constexpr void copyDiagonaleFrom(const SelfType& copiedFrom) noexcept;
@@ -24,7 +27,7 @@ namespace Core::Maths
     public:
         inline static constexpr size_t getSize() noexcept;
 
-        constexpr SelfType  getTransposed() const noexcept;
+        constexpr EqType  getTransposed() const noexcept;
         constexpr SelfType& transpose() noexcept;
 
         template<size_t SELF_SIZE = SIZE>
@@ -35,14 +38,14 @@ namespace Core::Maths
         inline constexpr bool isOrthogonal() const noexcept;
         inline constexpr ELEM_TYPE getMinorant(size_t excludedRowIndex, size_t excludedColumnIndex) const noexcept;
         inline constexpr ELEM_TYPE  getCofactor(size_t column, size_t line) const noexcept;
-        constexpr SelfType getComatrix() const noexcept;
-        inline constexpr SelfType getAdjoint() const noexcept;
-        inline constexpr SelfType getInverse() const noexcept;
+        constexpr EqType getComatrix() const noexcept;
+        inline constexpr EqType getAdjoint() const noexcept;
+        inline constexpr EqType getInverse() const noexcept;
 
         template<typename OTHER_MATRIX>
-        inline constexpr SelfType resolveEquation(const OTHER_MATRIX& result) const noexcept;
+        inline constexpr EqType resolveEquation(const OTHER_MATRIX& result) const noexcept;
 
-        static constexpr SelfType identity() noexcept;
+        static constexpr EqType identity() noexcept;
 
         static inline constexpr void raiseAsserts() noexcept
         {

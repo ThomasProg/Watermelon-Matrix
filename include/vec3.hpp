@@ -1,7 +1,7 @@
 #ifndef _VEC3_HPP_
 #define _VEC3_HPP_
 
-#include "baseMatrix.hpp"
+#include "vecBase.hpp"
 
 namespace Core::Maths
 {
@@ -29,6 +29,8 @@ namespace Core::Maths
             Super::template raiseAsserts<SelfType>();
         }
     };
+
+    // using Vec3f = Vec3<float>;
 }
 
 #endif

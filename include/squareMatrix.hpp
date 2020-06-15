@@ -17,9 +17,15 @@ namespace Core::Maths
     public:
         union
         {
-            ElemType elements[SelfType::getNbElements()] = {};
-            std::array<ElemType, SelfType::getNbElements()> array;
+            ElemType elements[SelfType::getNbElements()];
+            std::array<ElemType, SelfType::getNbElements()> array = {};
         };
+
+        inline constexpr SquareMatrix() __attribute__((always_inline))
+            : array()
+        {
+
+        }
 
     public:
         static inline constexpr void raiseAsserts() noexcept

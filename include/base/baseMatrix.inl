@@ -2,8 +2,15 @@
 
 #include <cassert>
 
+// Writing all namespaces and template arguments would be long, not maintainable and unreadable.
+// We could use "using" or "typedef" to make it shorter, but since it is a .inl file,
+// it would be included everywhere, which is not what we want.
+// By using macros, we can shorten it, 
+// put the definition in one place only (maintainable),
+// and we can undef them at the end of the file.
 #define BASE_MATRIX_TEMPLATE_PARAMETERS template<class CHILD, size_t ROWS, size_t COLUMNS, typename ELEM_TYPE>
 #define BASE_MATRIX Core::Maths::BaseMatrix<CHILD, ROWS, COLUMNS, ELEM_TYPE>
+#define BASE_MATRIX_EQ typename BASE_MATRIX::EqType
 
 BASE_MATRIX_TEMPLATE_PARAMETERS
 inline constexpr size_t BASE_MATRIX::getNbRows() noexcept
@@ -31,7 +38,7 @@ inline constexpr bool BASE_MATRIX::isMultiplicationPossible()
 }
 
 BASE_MATRIX_TEMPLATE_PARAMETERS
-constexpr BASE_MATRIX BASE_MATRIX::operator+(const BASE_MATRIX& rhs) noexcept
+constexpr BASE_MATRIX_EQ BASE_MATRIX::operator+(const BASE_MATRIX& rhs) noexcept
 {
     BASE_MATRIX returnedMatrix;
     for (size_t i = 0; i < getNbElements(); i++)
@@ -43,7 +50,7 @@ constexpr BASE_MATRIX BASE_MATRIX::operator+(const BASE_MATRIX& rhs) noexcept
 }
 
 BASE_MATRIX_TEMPLATE_PARAMETERS
-constexpr BASE_MATRIX BASE_MATRIX::operator-(const BASE_MATRIX& rhs) noexcept
+constexpr BASE_MATRIX_EQ BASE_MATRIX::operator-(const BASE_MATRIX& rhs) noexcept
 {
     BASE_MATRIX returnedMatrix;
     for (size_t i = 0; i < getNbElements(); i++)
@@ -55,7 +62,7 @@ constexpr BASE_MATRIX BASE_MATRIX::operator-(const BASE_MATRIX& rhs) noexcept
 }
 
 BASE_MATRIX_TEMPLATE_PARAMETERS
-constexpr BASE_MATRIX BASE_MATRIX::operator*(const BASE_MATRIX& rhs) const noexcept
+constexpr BASE_MATRIX_EQ BASE_MATRIX::operator*(const BASE_MATRIX& rhs) const noexcept
 {
     BASE_MATRIX returnedMatrix;
     for (size_t i = 0; i < getNbElements(); i++)
@@ -67,7 +74,7 @@ constexpr BASE_MATRIX BASE_MATRIX::operator*(const BASE_MATRIX& rhs) const noexc
 }
 
 BASE_MATRIX_TEMPLATE_PARAMETERS
-constexpr BASE_MATRIX BASE_MATRIX::operator*(ELEM_TYPE rhs) const noexcept
+constexpr BASE_MATRIX_EQ BASE_MATRIX::operator*(ELEM_TYPE rhs) const noexcept
 {
     BASE_MATRIX returnedMatrix;
     for (size_t i = 0; i < getNbElements(); i++)
@@ -79,7 +86,7 @@ constexpr BASE_MATRIX BASE_MATRIX::operator*(ELEM_TYPE rhs) const noexcept
 }
 
 BASE_MATRIX_TEMPLATE_PARAMETERS
-constexpr BASE_MATRIX BASE_MATRIX::operator/(ELEM_TYPE rhs) const noexcept
+constexpr BASE_MATRIX_EQ BASE_MATRIX::operator/(ELEM_TYPE rhs) const noexcept
 {
     BASE_MATRIX returnedMatrix;
     for (size_t i = 0; i < getNbElements(); i++)
@@ -183,9 +190,9 @@ inline constexpr bool BASE_MATRIX::isMatrix()
 }
 
 BASE_MATRIX_TEMPLATE_PARAMETERS
-constexpr BASE_MATRIX BASE_MATRIX::zero() noexcept
+constexpr BASE_MATRIX_EQ BASE_MATRIX::zero() noexcept
 {
-    BASE_MATRIX returnedMatrix;
+    EqType returnedMatrix;
     for (size_t i = 0; i < getNbElements(); i++)
     {
         returnedMatrix.getElements()[i] = static_cast<ELEM_TYPE> (0);
@@ -284,3 +291,7 @@ std::ostream& Core::Maths::operator<<(std::ostream& stream, const Core::Maths::B
     }
     return stream;
 }
+
+#undef BASE_MATRIX_EQ
+#undef BASE_MATRIX 
+#undef BASE_MATRIX_TEMPLATE_PARAMETERS
