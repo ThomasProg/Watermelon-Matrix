@@ -1,5 +1,5 @@
-#ifndef _MATRIX1X1_HPP_
-#define _MATRIX1X1_HPP_
+#ifndef _NULL_MATRIX_HPP_
+#define _NULL_MATRIX_HPP_
 
 #include "baseSquareMatrix.hpp"
 
