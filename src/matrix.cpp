@@ -1,5 +1,5 @@
 #include "baseMatrix.hpp"
-#include "squareMatrixBase.hpp"
+#include "baseSquareMatrix.hpp"
 
 #include "matrix.hpp"
 #include "squareMatrix.hpp"
@@ -11,7 +11,7 @@ template class Core::Maths::Matrix<4, 4, float>; // Matrix4x4
 
 // template class Core::Maths::SquareMatrixBase<3,float>;
 
-template class Core::Maths::SquareMatrix<3, float>;
+template class Core::Maths::Matrix<3, 3, float>;
 
 #include "vec3.hpp"
 

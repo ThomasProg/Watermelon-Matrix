@@ -1,16 +1,17 @@
 #ifndef _SQUARE_MATRIX_HPP_
 #define _SQUARE_MATRIX_HPP_
 
-#include "squareMatrixBase.hpp"
+#include "matrix.hpp"
+#include "baseSquareMatrix.hpp"
 
 namespace Core::Maths
 {
     template<size_t SIZE, typename ELEM_TYPE>
-    class SquareMatrix : public SquareMatrixBase<SquareMatrix<SIZE, ELEM_TYPE>, SIZE, ELEM_TYPE>
+    class Matrix<SIZE, SIZE, ELEM_TYPE> : public BaseSquareMatrix<Matrix<SIZE, SIZE, ELEM_TYPE>, SIZE, ELEM_TYPE>
     {
     protected:
-        using SelfType = SquareMatrix<SIZE, ELEM_TYPE>;
-        using Super = SquareMatrixBase<SquareMatrix<SIZE, ELEM_TYPE>, SIZE, ELEM_TYPE>;
+        using SelfType = Matrix<SIZE, SIZE, ELEM_TYPE>;
+        using Super = BaseSquareMatrix<Matrix<SIZE, SIZE, ELEM_TYPE>, SIZE, ELEM_TYPE>;
 
         using ElemType = typename Super::ElemType;
 
@@ -21,7 +22,7 @@ namespace Core::Maths
             std::array<ElemType, SelfType::getNbElements()> array = {};
         };
 
-        inline constexpr SquareMatrix() __attribute__((always_inline))
+        inline constexpr Matrix() __attribute__((always_inline))
             : array()
         {
 
@@ -31,10 +32,11 @@ namespace Core::Maths
         static inline constexpr void raiseAsserts() noexcept
         {
             Super::raiseAsserts();
-        }
-
-        
+        }  
     };
+
+    template<size_t SIZE, typename ELEM_TYPE>
+    using SquareMatrix = Matrix<SIZE, SIZE, ELEM_TYPE>;
 }
 
 #endif 

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <array>
+#include <cassert>
 
 #define CORRECT_MATRIX_ASSERT(mat) static_assert(sizeof(mat) >= mat::childrenMinSizeof())
 
@@ -36,14 +37,14 @@ namespace Core::Maths
         {
             static_assert(std::is_standard_layout<SelfType>(), "Can't convert a non standard layout : return value would be unspecified.");
             static_assert(std::is_standard_layout<std::array<ElemType, (getNbRows() * getNbColumns())>>(), "Can't convert to a non standard layout : return value would be unspecified.");
-            return ((static_cast<CHILD*> (this)) ->array);// reinterpret_cast<ElemType*> (this);
+            return ((static_cast<CHILD*> (this)) ->array);
         }
 
         inline constexpr const std::array<ElemType, getNbElements()>& getElements() const noexcept __attribute__((always_inline))
         {
             static_assert(std::is_standard_layout<SelfType>(), "Can't convert a non standard layout : return value would be unspecified.");
             static_assert(std::is_standard_layout<std::array<ElemType, (getNbRows() * getNbColumns())>>(), "Can't convert to a non standard layout : return value would be unspecified.");
-            return ((static_cast<const CHILD*> (this)) ->array);// reinterpret_cast<const ElemType*> (this);
+            return ((static_cast<const CHILD*> (this)) ->array);
         }
 
     public:
@@ -60,7 +61,8 @@ namespace Core::Maths
     public:
         constexpr SelfType& operator=(const SelfType& rhs) noexcept
         {
-            getElements() = rhs.getElements();
+            assert(false);
+            // getElements() = rhs.getElements();
             return *this;
         }
 

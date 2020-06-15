@@ -1,47 +1,25 @@
 #include "baseMatrix.hpp"
 #include "matrix.hpp"
-#include "squareMatrixBase.hpp"
+#include "baseSquareMatrix.hpp"
 #include "squareMatrix.hpp"
 
-constexpr int foo()
+constexpr float foo()
 {
-    Core::Maths::Matrix<3,3,float> m1;
-    // for (size_t i = 0; i < m1.getNbElements(); i++)
-    //     m1.getElements()[i] = (float)i;
+    // Core::Maths::Matrix<3,1,float> m0 = Core::Maths::Matrix<3,1,float>::identity(); // error, function doesn't exit
+    Core::Maths::Matrix<3,1,float> m0 = Core::Maths::Matrix<3,1,float>::zero();
 
-    Core::Maths::Matrix<3,3,float> m2 = m1;
+    Core::Maths::Matrix<3,3,float> m1 = Core::Maths::Matrix<3,3,float>::identity();
 
-    // m1 = Core::Maths::Matrix<3,3,float>::zero();
+    Core::Maths::SquareMatrix<3, float> m2 = m1;
 
-    // Core::Maths::SquareMatrix<3, float> m5 = m1;
+    // float det0 = m0.getDeterminant(); // error, function doesn't exit
+    float det1 = m1.getDeterminant();
 
-    return 0;
+    return det1;
 }
 
 int main()
 {
-    for (uint iovdrg = 0; iovdrg < 200lu; iovdrg++)
-    {
-        for (uint iovd2rg = 0; iovd2rg < 2000lu; iovd2rg++)
-        {
-            for (uint iovd22rg = 0; iovd22rg < 20lu; iovd22rg++)
-            {
-                constexpr int j = foo();
-            }
-        }
-    }
-
-    // Core::Maths::SquareMatrix<3,float> mx = Core::Maths::SquareMatrix<3,float>::zero();
-    // Core::Maths::BaseMatrix<Core::Maths::SquareMatrix<3,float>, 3,3,float> mm = mx;
-
-    
-    // Core::Maths::Matrix<3,3,float> mmj = Core::Maths::SquareMatrix<3,float>::zero();
-    // Core::Maths::Matrix<3,3,float> mmj2 = Core::Maths::SquareMatrix<3,float>::zero();
-    // Core::Maths::SquareMatrix<3,float> m10 = Core::Maths::SquareMatrixBase<Core::Maths::Matrix<3,3,float>, 3,float>(mmj);
-
-    // m1 = Core::Maths::Matrix<3,3,float> (Core::Maths::SquareMatrix<3,float>::zero());
-    // std::cout << m1 << std::endl;
-
-    // m1.raiseAsserts();
-    // m1.getElements();
+    constexpr float j = foo();
+    std::cout << j << std::endl;
 }
