@@ -1,18 +1,21 @@
-#ifndef _MATRIX_4X4_HPP_
-#define _MATRIX_4X4_HPP_
+#ifndef _BASE_MATRIX_4X4_HPP_
+#define _BASE_MATRIX_4X4_HPP_
 
-#include "squaredMatrix.hpp"
+#include "baseSquareMatrix.hpp"
 
 namespace Core::Maths
 {
-    template<typename ELEM_TYPE>
-    class Matrix4x4 : public SquaredMatrix<4lu, ELEM_TYPE>
+    template<class CHILD, typename ELEM_TYPE>
+    class BaseMatrix4x4 : public BaseSquaredMatrix<CHILD, 4lu, ELEM_TYPE>
     {
     protected:
-        using MatType = Matrix4x4<ELEM_TYPE>;
-
-    private:
-
+        // Parent Type
+        using Super            = BaseSquaredMatrix<CHILD, 4lu, ELEM_TYPE>;
+        // Type of the current Matrix
+        using SelfType         = BaseMatrix4x4<CHILD, ELEM_TYPE>;
+        // Equivalent Type
+        using EqType           = Matrix<4lu, 4lu, ELEM_TYPE>;
+        using ElemType         = ELEM_TYPE;
 
     public:
         Vec3 getXAxis() const;

@@ -1,15 +1,24 @@
 #ifndef _VEC3_HPP_
 #define _VEC3_HPP_
 
-#include "vecBase.hpp"
+#include "baseVec.hpp"
 
 namespace Core::Maths
 {
+    // forward declaration
     template<typename ELEM_TYPE>
-    struct Vec3 : public VecBase<3, ELEM_TYPE>
+    struct Matrix<1lu, 3lu, ELEM_TYPE>;
+
+    // Vec3 alias
+    template<typename ELEM_TYPE>
+    using Vec3 = Matrix<1lu, 3lu, ELEM_TYPE>;
+    using Vec3f = Vec3<float>;
+
+    template<typename ELEM_TYPE>
+    struct Matrix<1lu, 3lu, ELEM_TYPE> : public BaseVec<Vec3<ELEM_TYPE>, 3lu, ELEM_TYPE>
     {
         using SelfType = Vec3<ELEM_TYPE>;
-        using Super    = VecBase<3, ELEM_TYPE>; 
+        using Super    = BaseVec<SelfType, 3lu, ELEM_TYPE>; 
 
         union 
         {
@@ -19,18 +28,26 @@ namespace Core::Maths
                 ELEM_TYPE x, y, z;
             };
 
-            ELEM_TYPE* ptr;
-
-            std::array<ELEM_TYPE, SelfType::getNbElements()> components; 
+            std::array<ELEM_TYPE, SelfType::getNbElements()> array; 
         };
 
-        static inline constexpr void raiseAsserts() noexcept
+        inline constexpr Matrix() __attribute__((always_inline))
+            : array()
         {
-            Super::template raiseAsserts<SelfType>();
+
+        }
+
+        inline static constexpr SelfType crossProduct(const SelfType& lhs, 
+                                                      const SelfType& rhs) noexcept
+        {
+            return 
+            {
+                lhs.y * rhs.z - lhs.z * rhs.y,
+                lhs.z * rhs.x - lhs.x * rhs.z,
+                lhs.x * rhs.y - lhs.y * rhs.x
+            };
         }
     };
-
-    // using Vec3f = Vec3<float>;
 }
 
 #endif

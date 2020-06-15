@@ -22,17 +22,11 @@ namespace Core::Maths
             std::array<ElemType, SelfType::getNbElements()> array = {};
         };
 
-        inline constexpr Matrix() __attribute__((always_inline))
+        inline constexpr Matrix() noexcept __attribute__((always_inline)) 
             : array()
         {
 
         }
-
-    public:
-        static inline constexpr void raiseAsserts() noexcept
-        {
-            Super::raiseAsserts();
-        }  
     };
 
     template<size_t SIZE, typename ELEM_TYPE>

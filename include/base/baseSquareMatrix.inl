@@ -1,11 +1,11 @@
 #include "baseSquareMatrix.hpp"
 
-#define _BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS template<class CHILD, size_t SIZE, typename ELEM_TYPE> 
-#define _BASE_SQUARE_MATRIX Core::Maths::BaseSquareMatrix<CHILD, SIZE, ELEM_TYPE>
-#define _BASE_SQUARE_MATRIX_EQ typename _BASE_SQUARE_MATRIX::EqType
+#define BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS template<class CHILD, size_t SIZE, typename ELEM_TYPE> 
+#define BASE_SQUARE_MATRIX Core::Maths::BaseSquareMatrix<CHILD, SIZE, ELEM_TYPE>
+#define BASE_SQUARE_MATRIX_EQ typename BASE_SQUARE_MATRIX::EqType
 
-_BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS  
-constexpr void _BASE_SQUARE_MATRIX::copyDiagonaleFrom(const _BASE_SQUARE_MATRIX& copiedFrom) noexcept
+BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS  
+constexpr void BASE_SQUARE_MATRIX::copyDiagonaleFrom(const BASE_SQUARE_MATRIX& copiedFrom) noexcept
 {
     for (size_t i = 0; i < getSize(); i++)
     {
@@ -13,8 +13,8 @@ constexpr void _BASE_SQUARE_MATRIX::copyDiagonaleFrom(const _BASE_SQUARE_MATRIX&
     }
 }
 
-_BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS  
-constexpr void _BASE_SQUARE_MATRIX::setDiagonaleTo(const ELEM_TYPE& value) noexcept
+BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS  
+constexpr void BASE_SQUARE_MATRIX::setDiagonaleTo(const ELEM_TYPE& value) noexcept
 {
     for (size_t i = 0; i < getSize(); i++)
     {
@@ -22,19 +22,19 @@ constexpr void _BASE_SQUARE_MATRIX::setDiagonaleTo(const ELEM_TYPE& value) noexc
     }
 }
 
-_BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS  
-inline constexpr size_t _BASE_SQUARE_MATRIX::getSize() noexcept
+BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS  
+inline constexpr size_t BASE_SQUARE_MATRIX::getSize() noexcept
 {
-    // // _BASE_SQUARE_MATRIX_ASSERT
+    // // BASE_SQUARE_MATRIX_ASSERT
 
     // Could also return getNbRows(), the decision is arbitrary. 
     return SIZE;
 }
 
-_BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS  
-constexpr _BASE_SQUARE_MATRIX_EQ _BASE_SQUARE_MATRIX::getTransposed() const noexcept
+BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS  
+constexpr BASE_SQUARE_MATRIX_EQ BASE_SQUARE_MATRIX::getTransposed() const noexcept
 {
-    _BASE_SQUARE_MATRIX_EQ returnedMatrix;
+    BASE_SQUARE_MATRIX_EQ returnedMatrix;
 
     for (size_t i = 0; i < getSize(); i++)
     {
@@ -53,8 +53,8 @@ constexpr _BASE_SQUARE_MATRIX_EQ _BASE_SQUARE_MATRIX::getTransposed() const noex
     return returnedMatrix;
 }
 
-_BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS  
-constexpr _BASE_SQUARE_MATRIX& _BASE_SQUARE_MATRIX::transpose() noexcept
+BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS  
+constexpr BASE_SQUARE_MATRIX& BASE_SQUARE_MATRIX::transpose() noexcept
 {
     for (size_t i = 0; i < getSize(); i++)
     {
@@ -69,8 +69,8 @@ constexpr _BASE_SQUARE_MATRIX& _BASE_SQUARE_MATRIX::transpose() noexcept
 
 
 
-_BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS  
-constexpr _BASE_SQUARE_MATRIX_EQ _BASE_SQUARE_MATRIX::identity() noexcept
+BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS  
+constexpr BASE_SQUARE_MATRIX_EQ BASE_SQUARE_MATRIX::identity() noexcept
 {
     EqType returnedMatrix = Core::Maths::BaseSquareMatrix<SelfType, getSize(), ELEM_TYPE>::zero();
 
@@ -82,16 +82,16 @@ constexpr _BASE_SQUARE_MATRIX_EQ _BASE_SQUARE_MATRIX::identity() noexcept
     return returnedMatrix;
 }
 
-_BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS  
+BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS  
 template<size_t SELF_SIZE>
-constexpr ELEM_TYPE _BASE_SQUARE_MATRIX::getDeterminant(typename std::enable_if<(SELF_SIZE == 1)>::type*) const noexcept
+constexpr ELEM_TYPE BASE_SQUARE_MATRIX::getDeterminant(typename std::enable_if<(SELF_SIZE == 1)>::type*) const noexcept
 {
     return this->getElements()[0];
 }
 
-_BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS  
+BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS  
 template<size_t SELF_SIZE>
-constexpr ELEM_TYPE _BASE_SQUARE_MATRIX::getDeterminant(typename std::enable_if<(SELF_SIZE > 1)>::type*) const noexcept
+constexpr ELEM_TYPE BASE_SQUARE_MATRIX::getDeterminant(typename std::enable_if<(SELF_SIZE > 1)>::type*) const noexcept
 {
     ElemType det = static_cast<ElemType>(0);
     
@@ -106,21 +106,21 @@ constexpr ELEM_TYPE _BASE_SQUARE_MATRIX::getDeterminant(typename std::enable_if<
     return det;
 }
 
-_BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS
-inline constexpr bool _BASE_SQUARE_MATRIX::isOrthogonal() const noexcept
+BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS
+inline constexpr bool BASE_SQUARE_MATRIX::isOrthogonal() const noexcept
 {
     return (*this) * this->getTransposed() == this->identity();
 }
 
-_BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS
-inline constexpr ELEM_TYPE _BASE_SQUARE_MATRIX::getMinorant(size_t excludedRowIndex, size_t excludedColumnIndex) const noexcept
+BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS
+inline constexpr ELEM_TYPE BASE_SQUARE_MATRIX::getMinorant(size_t excludedRowIndex, size_t excludedColumnIndex) const noexcept
 {
     // TODO : Sfinae
     return Core::Maths::BaseSquareMatrix<SelfType, getSize() - 1, ElemType>(this->getSubMatrix(excludedRowIndex, excludedColumnIndex)).getDeterminant();
 }
 
-_BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS
-inline constexpr ELEM_TYPE _BASE_SQUARE_MATRIX::getCofactor(size_t excludedRowIndex, size_t excludedColumnIndex) const noexcept
+BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS
+inline constexpr ELEM_TYPE BASE_SQUARE_MATRIX::getCofactor(size_t excludedRowIndex, size_t excludedColumnIndex) const noexcept
 {
     return (excludedRowIndex + excludedColumnIndex) % 2 == 0 ? // condition
             getMinorant(excludedRowIndex, excludedColumnIndex) 
@@ -128,10 +128,10 @@ inline constexpr ELEM_TYPE _BASE_SQUARE_MATRIX::getCofactor(size_t excludedRowIn
             - getMinorant(excludedRowIndex, excludedColumnIndex);
 }
 
-_BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS
-constexpr _BASE_SQUARE_MATRIX_EQ _BASE_SQUARE_MATRIX::getComatrix() const noexcept
+BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS
+constexpr BASE_SQUARE_MATRIX_EQ BASE_SQUARE_MATRIX::getComatrix() const noexcept
 {
-    _BASE_SQUARE_MATRIX_EQ comatrix;
+    BASE_SQUARE_MATRIX_EQ comatrix;
 
     for (size_t i = 0; i < this->getNbRows(); i++)
     {
@@ -144,26 +144,26 @@ constexpr _BASE_SQUARE_MATRIX_EQ _BASE_SQUARE_MATRIX::getComatrix() const noexce
     return comatrix;
 }
 
-_BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS
-inline constexpr _BASE_SQUARE_MATRIX_EQ _BASE_SQUARE_MATRIX::getAdjoint() const noexcept
+BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS
+inline constexpr BASE_SQUARE_MATRIX_EQ BASE_SQUARE_MATRIX::getAdjoint() const noexcept
 {
     return getComatrix().transpose();
 }
 
-_BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS
-inline constexpr _BASE_SQUARE_MATRIX_EQ _BASE_SQUARE_MATRIX::getInverse() const noexcept
+BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS
+inline constexpr BASE_SQUARE_MATRIX_EQ BASE_SQUARE_MATRIX::getInverse() const noexcept
 {
     return getAdjoint() / getDeterminant();
 }
 
-_BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS
+BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS
 template<typename OTHER_MATRIX>
-inline constexpr _BASE_SQUARE_MATRIX_EQ _BASE_SQUARE_MATRIX::resolveEquation(const OTHER_MATRIX& result) const noexcept
+inline constexpr BASE_SQUARE_MATRIX_EQ BASE_SQUARE_MATRIX::resolveEquation(const OTHER_MATRIX& result) const noexcept
 {    
     static_assert(OTHER_MATRIX::getNbColumns() == 1, "Columns number shall be 1. If it is not, then it is not an Equation."); // TODO : is this true ?
     static_assert(this->getNbColumns() == OTHER_MATRIX::getNbRows(), "Multiplication is not possible ; matrix sizes are not coherent."); // is multiplication possible
         // TODO : isMultiplicationPossible
-    // constexpr bool b = _BASE_SQUARE_MATRIX::isMultiplicationPossible<OTHER_MATRIX>();
+    // constexpr bool b = BASE_SQUARE_MATRIX::isMultiplicationPossible<OTHER_MATRIX>();
     // static_assert(b, "ay");
 
     return result * getInverse();
@@ -171,6 +171,6 @@ inline constexpr _BASE_SQUARE_MATRIX_EQ _BASE_SQUARE_MATRIX::resolveEquation(con
 
 
 
-#undef _BASE_SQUARE_MATRIX_EQ 
-#undef _BASE_SQUARE_MATRIX 
-#undef _BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS 
+#undef BASE_SQUARE_MATRIX_EQ 
+#undef BASE_SQUARE_MATRIX 
+#undef BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS 

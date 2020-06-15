@@ -43,11 +43,6 @@ namespace Core::Maths
         inline constexpr EqType resolveEquation(const OTHER_MATRIX& result) const noexcept;
 
         static constexpr EqType identity() noexcept;
-
-        static inline constexpr void raiseAsserts() noexcept
-        {
-            Super::raiseAsserts();
-        }
     };
 }
 

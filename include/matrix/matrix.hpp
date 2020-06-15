@@ -26,12 +26,6 @@ namespace Core::Maths
         {
 
         }
-
-    public:
-        static inline constexpr void raiseAsserts() noexcept
-        {
-            Super::raiseAsserts();
-        }
     };
 }
 
