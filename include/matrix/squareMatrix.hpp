@@ -1,6 +1,8 @@
 #ifndef _SQUARE_MATRIX_HPP_
 #define _SQUARE_MATRIX_HPP_
 
+#include<tuple>
+
 #include "matrix.hpp"
 #include "baseSquareMatrix.hpp"
 
@@ -24,6 +26,15 @@ namespace Core::Maths
 
         inline constexpr Matrix() noexcept __attribute__((always_inline)) 
             : array()
+        {
+
+        }
+
+        // The first argument is used to prevent the confusion with other constructors.
+        // TODO : SFINAE should be used.
+        template<typename ... ARGS>
+        inline constexpr Matrix(ELEM_TYPE&& m, ARGS&& ... args)
+            : array({std::forward<ELEM_TYPE>(m), std::forward<ARGS>(args)...})
         {
 
         }

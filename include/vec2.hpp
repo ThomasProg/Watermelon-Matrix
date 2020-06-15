@@ -41,6 +41,13 @@ namespace Core::Maths
         {
             return { -y, x };
         }
+
+        inline constexpr Matrix(const ELEM_TYPE& m1, 
+                                const ELEM_TYPE& m2) noexcept
+            : array({m1, m2})
+        {
+
+        }
     };
 }
 

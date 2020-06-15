@@ -47,6 +47,14 @@ namespace Core::Maths
                 lhs.x * rhs.y - lhs.y * rhs.x
             };
         }
+
+        inline constexpr Matrix(const ELEM_TYPE& m1, 
+                                const ELEM_TYPE& m2, 
+                                const ELEM_TYPE& m3) noexcept
+            : array({m1, m2, m3})
+        {
+
+        }
     };
 }
 
