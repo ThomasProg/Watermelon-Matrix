@@ -1,4 +1,5 @@
 #include "baseSquareMatrix.hpp"
+#include "matrix1x1.hpp"
 
 #define BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS template<class CHILD, size_t SIZE, typename ELEM_TYPE> 
 #define BASE_SQUARE_MATRIX Core::Maths::BaseSquareMatrix<CHILD, SIZE, ELEM_TYPE>

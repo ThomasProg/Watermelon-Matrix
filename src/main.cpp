@@ -6,6 +6,9 @@
 #include "vec4.hpp"
 #include "vec3.hpp"
 #include "vec2.hpp"
+#include "vec.hpp"
+
+#include "matrix1x1.hpp"
 
 constexpr float foo()
 {
@@ -25,8 +28,12 @@ constexpr float foo()
     Core::Maths::Matrix<1, 3, float> myVec = {};
     myVec.array = {1, 3, 2};
 
+    Core::Maths::Vec<10,float> newVec;
+    Core::Maths::Matrix<1, 10, float>& fr = newVec;
 
     Core::Maths::Matrix<1,3,float> m10 = {1.f,2.f,3.f};
+
+    Core::Maths::Matrix1x1<float> vfg;
 
     return det1;
 }
