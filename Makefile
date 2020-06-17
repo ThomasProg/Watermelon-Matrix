@@ -1,7 +1,7 @@
 MAKEFLAGS+=--no-builtin-rules --no-builtin-variables
 
 CXXFLAGS=-O0 -g -Wall -MMD -Wno-unused-function -std=c++17
-CXXFLAGS+=-Iinclude
+CXXFLAGS+=-Iinclude -Iinclude/base
 CFLAGS=$(CXXFLAGS)
 CC=gcc
 CXX=g++
