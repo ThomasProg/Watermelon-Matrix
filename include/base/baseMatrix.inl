@@ -31,6 +31,22 @@ inline constexpr size_t BASE_MATRIX::getNbElements() noexcept
 }
 
 BASE_MATRIX_TEMPLATE_PARAMETERS
+inline constexpr std::array<typename BASE_MATRIX::ElemType, BASE_MATRIX::getNbElements()>& BASE_MATRIX::getElements() noexcept
+{
+    static_assert(std::is_standard_layout<SelfType>(), "Can't convert a non standard layout : return value would be unspecified.");
+    static_assert(std::is_standard_layout<std::array<ElemType, (getNbRows() * getNbColumns())>>(), "Can't convert to a non standard layout : return value would be unspecified.");
+    return ((static_cast<CHILD*> (this)) ->array);
+}
+
+BASE_MATRIX_TEMPLATE_PARAMETERS
+inline constexpr const std::array<typename BASE_MATRIX::ElemType, BASE_MATRIX::getNbElements()>& BASE_MATRIX::getElements() const noexcept
+{
+    static_assert(std::is_standard_layout<SelfType>(), "Can't convert a non standard layout : return value would be unspecified.");
+    static_assert(std::is_standard_layout<std::array<ElemType, (getNbRows() * getNbColumns())>>(), "Can't convert to a non standard layout : return value would be unspecified.");
+    return ((static_cast<const CHILD*> (this)) ->array);
+}
+
+BASE_MATRIX_TEMPLATE_PARAMETERS
 template<typename OTHER_MATRIX, typename>
 inline constexpr bool BASE_MATRIX::isMultiplicationPossible()
 {

@@ -27,6 +27,7 @@ namespace Core::Maths
         constexpr EqType  getTransposed() const noexcept;
         constexpr SelfType& transpose() noexcept;
 
+        // getDeterminant() could also be declared in specialized classes to improve performance.
         template<size_t SELF_SIZE = SIZE>
         constexpr ELEM_TYPE getDeterminant(typename std::enable_if<(SELF_SIZE > 1)>::type* = nullptr) const noexcept; // stops recursion
         template<size_t SELF_SIZE = SIZE>

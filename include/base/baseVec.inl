@@ -32,7 +32,19 @@ inline constexpr ELEM_TYPE BASE_VEC::length() const noexcept
     return sqrt(sqrLength());
 }
 
+BASE_VEC_TEMPLATE_PARAMETERS
+inline constexpr float BASE_VEC::operator[](size_t index) const noexcept
+{
+    assert(index < SelfType::getSize());
+    return SelfType::getElements()[index];
+}
 
+BASE_VEC_TEMPLATE_PARAMETERS
+inline constexpr float& BASE_VEC::operator[](size_t index) noexcept
+{
+    assert(index < SelfType::getSize());
+    return SelfType::getElements()[index];
+}
 
 #undef BASE_VEC_TEMPLATE_PARAMETERS 
 #undef BASE_VEC

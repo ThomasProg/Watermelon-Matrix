@@ -23,35 +23,26 @@ namespace Core::Maths
                                                     const SelfType& rhs) noexcept;
 
         /**
-         * @brief 
+         * @brief Returns the squared length of the vector : x*x + y*y + z*z
          * 
          * @return The square length of the vector.
          */
         inline constexpr ElemType sqrLength() const noexcept;
 
         /**
-         * @brief 
+         * @brief Returns the length of the vector : sqrt(x*x + y*y + z*z)
          * 
          * @return The length of the vector.
          */
         inline constexpr ElemType length()    const noexcept;
 
-        // SIZE SHOULD NOT BE NULL
+        // LENGTH SHOULD NOT BE NULL
         inline constexpr void normalize();
-        // SIZE SHOULD NOT BE NULL
+        // LENGTH SHOULD NOT BE NULL
         inline constexpr SelfType getNormalized() const;
 
-		inline constexpr float operator[](size_t index) const noexcept
-		{
-			assert(index < SelfType::getSize());
-			return SelfType::getElements()[index];
-		}
-
-		inline constexpr float& operator[](size_t index) noexcept
-		{
-			assert(index < SelfType::getSize());
-			return SelfType::getElements()[index];
-        }
+		inline constexpr float  operator[](size_t index) const noexcept;
+		inline constexpr float& operator[](size_t index)       noexcept;
     };
 }
 

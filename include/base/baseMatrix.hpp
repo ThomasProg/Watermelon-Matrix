@@ -5,13 +5,20 @@
 #include <array>
 #include <cassert>
 
+#include "matrixForwardDecl.hpp"
+
 #define CORRECT_MATRIX_ASSERT(mat) static_assert(sizeof(mat) >= mat::childrenMinSizeof())
 
 namespace Core::Maths
 {
-    template<size_t ROWS, size_t COLUMNS, typename ELEM_TYPE>
-    class Matrix;
-
+    /**
+     * @brief This class should NOT be instancied. It should only be inheriting from.
+     * 
+     * @tparam CHILD        : The type of the class inheriting this class.
+     * @tparam ROWS         : The number of rows this matrix should have.
+     * @tparam COLUMNS      : The number of columns this matrix should have.
+     * @tparam ELEM_TYPE    : The type this matrix should store.
+     */
     template<class CHILD, size_t ROWS, size_t COLUMNS, typename ELEM_TYPE>
     class BaseMatrix 
     {
@@ -22,57 +29,24 @@ namespace Core::Maths
         using EqType    = Matrix<ROWS, COLUMNS, ELEM_TYPE>;
         using ElemType  = ELEM_TYPE;
 
-        // ========================================== //
-        // ================= MATRIX ================= //
-        // ========================================== //
-
     public:
         inline static constexpr size_t getNbRows()     noexcept;
         inline static constexpr size_t getNbColumns()  noexcept;
         inline static constexpr size_t getNbElements() noexcept;
 
-        // ElemType elements[ROWS * COLUMNS] = {};
+        inline constexpr std::array<ElemType, SelfType::getNbElements()>& getElements() noexcept __attribute__((always_inline));
+        inline constexpr const std::array<ElemType, SelfType::getNbElements()>& getElements() const noexcept __attribute__((always_inline));
 
-        inline constexpr std::array<ElemType, getNbElements()>& getElements() noexcept __attribute__((always_inline))
-        {
-            static_assert(std::is_standard_layout<SelfType>(), "Can't convert a non standard layout : return value would be unspecified.");
-            static_assert(std::is_standard_layout<std::array<ElemType, (getNbRows() * getNbColumns())>>(), "Can't convert to a non standard layout : return value would be unspecified.");
-            return ((static_cast<CHILD*> (this)) ->array);
-        }
-
-        inline constexpr const std::array<ElemType, getNbElements()>& getElements() const noexcept __attribute__((always_inline))
-        {
-            static_assert(std::is_standard_layout<SelfType>(), "Can't convert a non standard layout : return value would be unspecified.");
-            static_assert(std::is_standard_layout<std::array<ElemType, (getNbRows() * getNbColumns())>>(), "Can't convert to a non standard layout : return value would be unspecified.");
-            return ((static_cast<const CHILD*> (this)) ->array);
-        }
-
-    public:
+        // We protect constructors to prevent the class instantiation.
+    protected: 
         inline constexpr BaseMatrix() noexcept = default;
-        inline constexpr BaseMatrix(const SelfType& rhs) noexcept
-        {
-            getElements() = rhs.getElements();
-        }
-        inline constexpr BaseMatrix(SelfType&& rhs) noexcept
-        {
-            getElements() = std::move(rhs.getElements());
-        }
+        inline constexpr BaseMatrix(const SelfType& rhs) noexcept = default;
+        inline constexpr BaseMatrix(SelfType&& rhs) noexcept = default;
         inline ~BaseMatrix() noexcept = default;
+        constexpr SelfType& operator=(const SelfType& rhs) noexcept = default;
+        constexpr SelfType& operator=(SelfType&& rhs)      noexcept = default;
+
     public:
-        constexpr SelfType& operator=(const SelfType& rhs) noexcept
-        {
-            assert(false);
-            // getElements() = rhs.getElements();
-            return *this;
-        }
-
-        constexpr SelfType& operator=(SelfType&& rhs)      noexcept
-        {
-            getElements() = std::move(rhs.getElements());
-            return *this;
-        }
-
-
         constexpr EqType operator+(const SelfType& rhs) noexcept;
         constexpr EqType operator-(const SelfType& rhs) noexcept;
         constexpr EqType operator*(const SelfType& rhs) const noexcept;
@@ -112,20 +86,6 @@ namespace Core::Maths
         constexpr Matrix<ROWS - 1, COLUMNS - 1, ElemType> getSubMatrix(size_t excludedRowIndex, size_t excludedColumnIndex) const noexcept;
 
         static constexpr EqType zero() noexcept;
-
-        template<typename MATRIX, typename = std::enable_if_t<std::is_base_of<SelfType, MATRIX>::value>>
-        inline constexpr operator MATRIX() noexcept
-        {
-            static_assert(std::is_standard_layout<SelfType>(), "Can't convert a non standard layout : return value would be unspecified.");
-            static_assert(std::is_standard_layout<MATRIX>(), "Can't convert to a non standard layout : return value would be unspecified.");
-            static_assert(sizeof(SelfType) <= sizeof(MATRIX), "Can't convert if return type size is not equal or higher than the current type size.");
-            return * reinterpret_cast<MATRIX*> (this);
-        }
-
-        inline constexpr operator Core::Maths::Matrix<getNbRows(), getNbColumns(), ElemType>() noexcept
-        {
-            return * reinterpret_cast<Core::Maths::Matrix<getNbRows(), getNbColumns(), ElemType>*> (this);
-        }
 
         static constexpr size_t childrenMinSizeof() noexcept
         {
