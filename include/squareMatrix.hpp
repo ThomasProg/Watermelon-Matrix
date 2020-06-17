@@ -1,10 +1,8 @@
 #ifndef _SQUARE_MATRIX_HPP_
 #define _SQUARE_MATRIX_HPP_
 
-#include<tuple>
-
-#include "matrix.hpp"
 #include "baseSquareMatrix.hpp"
+#include "matrixForwardDecl.hpp"
 
 namespace Core::Maths
 {

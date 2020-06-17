@@ -2,6 +2,7 @@
 #define _MATRIX_HPP_
 
 #include "baseMatrix.hpp"
+#include "matrixForwardDecl.hpp"
 
 namespace Core::Maths
 {

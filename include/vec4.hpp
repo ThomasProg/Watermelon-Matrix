@@ -2,6 +2,7 @@
 #define _VEC4_HPP_
 
 #include "baseVec.hpp"
+#include "matrixForwardDecl.hpp"
 
 namespace Core::Maths
 {

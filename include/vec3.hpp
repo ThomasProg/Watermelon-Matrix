@@ -2,13 +2,10 @@
 #define _VEC3_HPP_
 
 #include "baseVec.hpp"
+#include "matrixForwardDecl.hpp"
 
 namespace Core::Maths
 {
-    // forward declaration
-    template<typename ELEM_TYPE>
-    struct Matrix<1lu, 3lu, ELEM_TYPE>;
-
     // Vec3 alias
     template<typename ELEM_TYPE>
     using Vec3 = Matrix<1lu, 3lu, ELEM_TYPE>;
