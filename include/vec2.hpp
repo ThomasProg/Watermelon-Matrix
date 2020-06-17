@@ -6,11 +6,6 @@
 
 namespace Core::Maths
 {
-    // Vec2 alias
-    template<typename ELEM_TYPE>
-    using Vec2 = Matrix<1lu, 2lu, ELEM_TYPE>;
-    using Vec2f = Vec2<float>;
-
     template<typename ELEM_TYPE>
     struct Matrix<1lu, 2lu, ELEM_TYPE> : public BaseVec<Vec2<ELEM_TYPE>, 2lu, ELEM_TYPE>
     {

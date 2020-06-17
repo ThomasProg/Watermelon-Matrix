@@ -37,9 +37,6 @@ namespace Core::Maths
 
         }
     };
-
-    template<size_t SIZE, typename ELEM_TYPE>
-    using SquareMatrix = Matrix<SIZE, SIZE, ELEM_TYPE>;
 }
 
 #endif 

@@ -38,9 +38,6 @@ namespace Core::Maths
 
         }
     };
-
-    template<typename ELEM_TYPE>
-    using Matrix1x1 = Matrix<1lu, 1lu, ELEM_TYPE>;
 }
 
 #endif 

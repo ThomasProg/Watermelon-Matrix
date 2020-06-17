@@ -12,9 +12,6 @@ namespace Core::Maths
     public:
         using isNull = std::true_type;
     };
-
-    template<typename ELEM_TYPE>
-    using NullMatrix = Matrix<0lu, 0lu, ELEM_TYPE>;
 }
 
 #endif 

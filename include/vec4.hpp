@@ -6,15 +6,6 @@
 
 namespace Core::Maths
 {
-    // forward declaration
-    template<typename ELEM_TYPE>
-    struct Matrix<1lu, 4lu, ELEM_TYPE>;
-
-    // Vec4 alias
-    template<typename ELEM_TYPE>
-    using Vec4  = Matrix<1lu, 4lu, ELEM_TYPE>;
-    using Vec4f = Vec4<float>;
-
     template<typename ELEM_TYPE>
     struct Matrix<1lu, 4lu, ELEM_TYPE> : public BaseVec<Vec4<ELEM_TYPE>, 4lu, ELEM_TYPE>
     {
