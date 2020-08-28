@@ -117,7 +117,8 @@ BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS
 inline constexpr ELEM_TYPE BASE_SQUARE_MATRIX::getMinorant(size_t excludedRowIndex, size_t excludedColumnIndex) const noexcept
 {
     // TODO : Sfinae
-    return Core::Maths::BaseSquareMatrix<SelfType, getSize() - 1, ElemType>(this->getSubMatrix(excludedRowIndex, excludedColumnIndex)).getDeterminant();
+    Core::Maths::SquareMatrix<getSize() - 1, ElemType> temp = this->getSubMatrix(excludedRowIndex, excludedColumnIndex);
+    return temp.getDeterminant();
 }
 
 BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS
@@ -148,7 +149,8 @@ constexpr BASE_SQUARE_MATRIX_EQ BASE_SQUARE_MATRIX::getComatrix() const noexcept
 BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS
 inline constexpr BASE_SQUARE_MATRIX_EQ BASE_SQUARE_MATRIX::getAdjoint() const noexcept
 {
-    return getComatrix().transpose();
+    // TODO : Use Transpose() but with correct type
+    return getComatrix().getTransposed();
 }
 
 BASE_SQUARE_MATRIX_TEMPLATE_PARAMETERS
