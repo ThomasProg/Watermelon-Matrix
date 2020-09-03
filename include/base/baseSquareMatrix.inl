@@ -49,7 +49,11 @@ constexpr BASE_SQUARE_MATRIX_EQ BASE_SQUARE_MATRIX::getTransposed() const noexce
         }
     }
 
-    returnedMatrix.copyDiagonaleFrom(*this);
+    //returnedMatrix.copyDiagonaleFrom(*this);
+    for (size_t i = 0; i < getSize(); i++)
+    {
+        returnedMatrix.getElements()[i * getSize() + i] = this->getElements()[i * getSize() + i];
+    }
 
     return returnedMatrix;
 }

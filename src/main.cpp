@@ -42,8 +42,7 @@ constexpr float foo()
 
 constexpr Core::Maths::SquareMatrix<4, float> inv()
 {
-    Core::Maths::Matrix<4,4,float> m1 = Core::Maths::Matrix<4,4,float>::identity();
-    m1[0][3] = 1;
+    constexpr Core::Maths::Matrix<4,4,float> m1 = Core::Maths::Matrix<4,4,float>::identity();
     return m1.getInverse();
 }
 
@@ -52,7 +51,10 @@ int main()
     constexpr float j = foo();
     std::cout << j << std::endl;
 
-    std::cout << inv() << std::endl;
+    constexpr Core::Maths::Matrix<4, 4, float> m1 = Core::Maths::Matrix<4, 4, float>::identity();
+    constexpr Core::Maths::Matrix<4, 4, float> mInv =   inv();
+
+    std::cout << mInv << std::endl;
 
     Core::Maths::Matrix<3,1,float> m10 {1.f,2.f,3.f};
 }

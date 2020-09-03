@@ -23,7 +23,7 @@ namespace Core::Maths
             std::array<ElemType, SelfType::getNbElements()> array = {};
         };
 
-        inline constexpr Matrix() noexcept __attribute__((always_inline))
+        __inline constexpr Matrix() noexcept 
             : array()
         {
 

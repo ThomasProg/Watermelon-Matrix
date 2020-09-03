@@ -18,7 +18,7 @@ namespace Core::Maths
             std::array<ELEM_TYPE, SelfType::getNbElements()> array; 
         };
 
-        inline constexpr Matrix() __attribute__((always_inline))
+        __inline constexpr Matrix() 
             : array()
         {
 

@@ -34,8 +34,8 @@ namespace Core::Maths
         inline static constexpr size_t getNbColumns()  noexcept;
         inline static constexpr size_t getNbElements() noexcept;
 
-        inline constexpr std::array<ElemType, SelfType::getNbElements()>& getElements() noexcept __attribute__((always_inline));
-        inline constexpr const std::array<ElemType, SelfType::getNbElements()>& getElements() const noexcept __attribute__((always_inline));
+        __inline constexpr std::array<ElemType, SelfType::getNbElements()>& getElements() noexcept;
+        __inline constexpr const std::array<ElemType, SelfType::getNbElements()>& getElements() const noexcept;
 
         // We protect constructors to prevent the class instantiation.
     protected: 
