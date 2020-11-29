@@ -1,5 +1,7 @@
 #include "baseVec.hpp"
-
+#include "matrix.hpp"
+#include "squareMatrix.hpp"
+#include "vec3.hpp"
 #include <cmath>
 
 #define BASE_VEC_TEMPLATE_PARAMETERS template<class CHILD, size_t SIZE, typename ELEM_TYPE> 
@@ -10,9 +12,9 @@ BASE_VEC_TEMPLATE_PARAMETERS
 inline constexpr ELEM_TYPE BASE_VEC::dotProduct(const BASE_VEC& lhs, const BASE_VEC& rhs) noexcept
 {
     ElemType dot = static_cast<ElemType>(0);
-    for (size_t i = 0; i < SelfType::getSize(); i++)
+    for (size_t i = 0; i < SelfType::getNbElements(); i++)
     {
-        dot += lhs.getElements()[0] * lhs.getElements()[0];
+        dot += lhs.getElements()[i] * lhs.getElements()[i];
     }
     return dot;
 }
@@ -21,6 +23,31 @@ BASE_VEC_TEMPLATE_PARAMETERS
 inline constexpr ELEM_TYPE BASE_VEC::sqrLength() const noexcept
 {
     return dotProduct(*this, *this);
+}
+
+BASE_VEC_TEMPLATE_PARAMETERS
+inline constexpr BASE_VEC_EQ BASE_VEC::getNormal() const
+{
+    return (*this) / length();
+}
+
+BASE_VEC_TEMPLATE_PARAMETERS
+inline constexpr void BASE_VEC::normalize()
+{
+    (*this) = getNormal();
+}
+
+BASE_VEC_TEMPLATE_PARAMETERS
+inline constexpr BASE_VEC_EQ BASE_VEC::getNormalSafe() const
+{
+    const float sqrLength = this->sqrLength(); 
+    return (sqrLength == 0.f) ? Super::zero() : ((*this) / std::sqrt(sqrLength));
+}
+
+BASE_VEC_TEMPLATE_PARAMETERS
+inline constexpr void BASE_VEC::normalizeSafe()
+{
+    (*this) = getNormalSafe();
 }
 
 BASE_VEC_TEMPLATE_PARAMETERS

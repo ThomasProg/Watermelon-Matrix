@@ -56,7 +56,7 @@ inline constexpr bool BASE_MATRIX::isMultiplicationPossible()
 BASE_MATRIX_TEMPLATE_PARAMETERS
 constexpr BASE_MATRIX_EQ BASE_MATRIX::operator+(const BASE_MATRIX& rhs) noexcept
 {
-    BASE_MATRIX returnedMatrix;
+    BASE_MATRIX_EQ returnedMatrix;
     for (size_t i = 0; i < getNbElements(); i++)
     {
         returnedMatrix.getElements()[i] = getElements()[i] + rhs.getElements()[i];
@@ -147,6 +147,12 @@ constexpr ELEM_TYPE* BASE_MATRIX::operator[](size_t id) noexcept
 {
     assert(id < getNbRows());
     return &(this->getElements()[id * getNbColumns()]);
+}
+
+BASE_MATRIX_TEMPLATE_PARAMETERS
+constexpr BASE_MATRIX_EQ BASE_MATRIX::operator-() noexcept
+{
+    return (-1) * (*this);
 }
 
 BASE_MATRIX_TEMPLATE_PARAMETERS

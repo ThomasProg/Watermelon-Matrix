@@ -26,6 +26,10 @@ namespace Core::Maths
     template<size_t SIZE, typename ELEM_TYPE>
     using SquareMatrix = Matrix<SIZE, SIZE, ELEM_TYPE>;
 
+    // // Matrix3x3
+    // template<size_t SIZE, typename ELEM_TYPE>
+    // using SquareMatrix = Matrix<SIZE, SIZE, ELEM_TYPE>;
+
     // Vec
     template<size_t SIZE, typename ELEM_TYPE>
     struct Matrix<1lu, SIZE, ELEM_TYPE>;

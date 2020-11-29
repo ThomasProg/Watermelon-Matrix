@@ -57,6 +57,8 @@ namespace Core::Maths
         constexpr ElemType const * operator[](size_t id) const noexcept;
         constexpr ElemType* operator[](size_t id) noexcept;
 
+        constexpr EqType operator-() noexcept;
+
         inline constexpr       Matrix<1, COLUMNS, ELEM_TYPE>& getRow(size_t index)       noexcept;
         inline constexpr const Matrix<1, COLUMNS, ELEM_TYPE>& getRow(size_t index) const noexcept;
 
@@ -111,6 +113,17 @@ namespace Core::Maths
             static_assert(std::is_standard_layout<CHILD>(), "CHILD should have a standard layout, or parent functions would be unspecified.");
         }
     };
+
+    template<typename RHS_CHILD, size_t RHS_ROWS, size_t RHS_COLUMNS, typename RHS_ELEM_TYPE>
+    constexpr Matrix<RHS_ROWS, RHS_COLUMNS, RHS_ELEM_TYPE> operator*(float lhs, const Core::Maths::BaseMatrix<RHS_CHILD, RHS_ROWS, RHS_COLUMNS, RHS_ELEM_TYPE>& rhs) 
+    {
+        Matrix<RHS_ROWS, RHS_COLUMNS, RHS_ELEM_TYPE> result;
+        for (size_t i = 0; i < rhs.getNbElements(); i++)
+        {
+            result[i] = lhs * rhs.getElements()[i];
+        }
+        return result;
+    }
 
     template<typename RHS_CHILD, size_t RHS_ROWS, size_t RHS_COLUMNS, typename RHS_ELEM_TYPE>
     std::ostream& operator<<(std::ostream& stream, const Core::Maths::BaseMatrix<RHS_CHILD, RHS_ROWS, RHS_COLUMNS, RHS_ELEM_TYPE>& rhs);

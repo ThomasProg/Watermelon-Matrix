@@ -1,6 +1,7 @@
 #ifndef _BASE_VEC_HPP_
 #define _BASE_VEC_HPP_
 
+#include "matrixForwardDecl.hpp"
 #include "baseMatrix.hpp"
 #include <array>
 
@@ -15,7 +16,7 @@ namespace Core::Maths
         // Type of the current Matrix
         using SelfType         = BaseVec<CHILD, SIZE, ELEM_TYPE>;
         // Equivalent Type
-        using EqType           = Matrix<SIZE, 1lu, ELEM_TYPE>;
+        using EqType           = Matrix<1lu, SIZE, ELEM_TYPE>;
         using ElemType         = ELEM_TYPE;
 
     public:
@@ -36,10 +37,12 @@ namespace Core::Maths
          */
         inline constexpr ElemType length()    const noexcept;
 
-        // LENGTH SHOULD NOT BE NULL
+        /* LENGTH SHOULD NOT BE NULL */
         inline constexpr void normalize();
-        // LENGTH SHOULD NOT BE NULL
-        inline constexpr SelfType getNormalized() const;
+        /* LENGTH SHOULD NOT BE NULL */
+        inline constexpr EqType getNormal() const;
+        inline constexpr void normalizeSafe();
+        inline constexpr EqType getNormalSafe() const;
 
 		inline constexpr float  operator[](size_t index) const noexcept;
 		inline constexpr float& operator[](size_t index)       noexcept;
