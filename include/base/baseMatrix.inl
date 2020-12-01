@@ -68,7 +68,7 @@ constexpr BASE_MATRIX_EQ BASE_MATRIX::operator+(const BASE_MATRIX& rhs) noexcept
 BASE_MATRIX_TEMPLATE_PARAMETERS
 constexpr BASE_MATRIX_EQ BASE_MATRIX::operator-(const BASE_MATRIX& rhs) noexcept
 {
-    BASE_MATRIX returnedMatrix;
+    BASE_MATRIX_EQ returnedMatrix;
     for (size_t i = 0; i < getNbElements(); i++)
     {
         returnedMatrix.getElements()[i] = getElements()[i] - rhs.getElements()[i];
@@ -80,7 +80,7 @@ constexpr BASE_MATRIX_EQ BASE_MATRIX::operator-(const BASE_MATRIX& rhs) noexcept
 BASE_MATRIX_TEMPLATE_PARAMETERS
 constexpr BASE_MATRIX_EQ BASE_MATRIX::operator*(const BASE_MATRIX& rhs) const noexcept
 {
-    BASE_MATRIX returnedMatrix;
+    BASE_MATRIX_EQ returnedMatrix;
     for (size_t i = 0; i < getNbElements(); i++)
     {
         returnedMatrix.getElements()[i] = getElements()[i] * rhs.getElements()[i];
@@ -92,7 +92,7 @@ constexpr BASE_MATRIX_EQ BASE_MATRIX::operator*(const BASE_MATRIX& rhs) const no
 BASE_MATRIX_TEMPLATE_PARAMETERS
 constexpr BASE_MATRIX_EQ BASE_MATRIX::operator*(ELEM_TYPE rhs) const noexcept
 {
-    BASE_MATRIX returnedMatrix;
+    BASE_MATRIX_EQ returnedMatrix;
     for (size_t i = 0; i < getNbElements(); i++)
     {
         returnedMatrix.getElements()[i] = getElements()[i] * rhs;
