@@ -14,7 +14,7 @@ inline constexpr ELEM_TYPE BASE_VEC::dotProduct(const BASE_VEC& lhs, const BASE_
     ElemType dot = static_cast<ElemType>(0);
     for (size_t i = 0; i < SelfType::getNbElements(); i++)
     {
-        dot += lhs.getElements()[i] * lhs.getElements()[i];
+        dot += lhs.getElements()[i] * rhs.getElements()[i];
     }
     return dot;
 }
@@ -34,20 +34,20 @@ inline constexpr BASE_VEC_EQ BASE_VEC::getNormal() const
 BASE_VEC_TEMPLATE_PARAMETERS
 inline constexpr void BASE_VEC::normalize()
 {
-    (*this) = getNormal();
+    this->getElements() = getNormal().getElements();
 }
 
 BASE_VEC_TEMPLATE_PARAMETERS
 inline constexpr BASE_VEC_EQ BASE_VEC::getNormalSafe() const
 {
-    const float sqrLength = this->sqrLength(); 
+    const float sqrLength = this->sqrLength();
     return (sqrLength == 0.f) ? Super::zero() : ((*this) / std::sqrt(sqrLength));
 }
 
 BASE_VEC_TEMPLATE_PARAMETERS
 inline constexpr void BASE_VEC::normalizeSafe()
 {
-    (*this) = getNormalSafe();
+    this->getElements() = this->getNormalSafe().getElements();
 }
 
 BASE_VEC_TEMPLATE_PARAMETERS
